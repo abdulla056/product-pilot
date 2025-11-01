@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@clerk/nextjs/server"
 import { analyzeCreatorGraph } from "@/lib/ai-analysis"
 import { mockVideoTranscripts, mockCreatorGraph } from "@/lib/mock-data"
+import { getAndTranscribeChannelVideos } from "@/lib/transcription"
+import { getMyYouTubeChannel } from "@/lib/composio-helpers"
 import type { AnalysisRequest, AnalysisResponse } from "@/types/analysis"
 
 /**
@@ -20,11 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = (await request.json()) as AnalysisRequest
-    const { channelId, videoCount = 10, depth = "standard" } = body
-
-    // For now, we'll use mock transcripts but run real AI analysis
-    // In production, you would fetch real transcripts here
-    const useMockData = true // Set to false when real transcription is ready
+    const { channelId, videoCount = 10, depth = "standard", useMockData = false } = body
 
     const startTime = Date.now()
 
@@ -32,16 +30,48 @@ export async function POST(request: NextRequest) {
     let channelName = "FitLife with Alex"
     let totalViews = 668000
     let subscriberCount = 78000
+    let actualChannelId = channelId || "unknown"
 
     if (!useMockData) {
-      // TODO: Fetch real video transcripts
-      // transcripts = await getVideoTranscripts(userId, channelId, videoCount)
-
-      // TODO: Get channel info
-      // const channelInfo = await getChannelInfo(userId, channelId)
-      // channelName = channelInfo.name
-      // totalViews = channelInfo.totalViews
-      // subscriberCount = channelInfo.subscriberCount
+      console.log("[analyze] Using real YouTube data and transcription")
+      
+      // Get channel info
+      const channelInfo = await getMyYouTubeChannel(userId)
+      
+      if (!channelInfo || !channelInfo.items || channelInfo.items.length === 0) {
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: "Could not fetch YouTube channel. Please ensure your YouTube account is connected." 
+          },
+          { status: 400 }
+        )
+      }
+      
+      const channel = channelInfo.items[0]
+      channelName = channel.snippet?.title || "Unknown Channel"
+      totalViews = parseInt(channel.statistics?.viewCount || "0")
+      subscriberCount = parseInt(channel.statistics?.subscriberCount || "0")
+      actualChannelId = channelId || channel.id
+      
+      console.log(`[analyze] Channel: ${channelName}, Subscribers: ${subscriberCount}`)
+      
+      // Get and transcribe videos
+      transcripts = await getAndTranscribeChannelVideos(userId, actualChannelId, videoCount)
+      
+      if (transcripts.length === 0) {
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: "No videos with transcripts found. Videos must have captions/subtitles enabled." 
+          },
+          { status: 400 }
+        )
+      }
+      
+      console.log(`[analyze] Successfully transcribed ${transcripts.length} videos`)
+    } else {
+      console.log("[analyze] Using mock data for analysis")
     }
 
     console.log(`🤖 Running AI analysis on ${transcripts.length} videos...`)
@@ -49,7 +79,7 @@ export async function POST(request: NextRequest) {
     // Run AI analysis with either mock or real transcripts
     const creatorGraph = await analyzeCreatorGraph(
       userId,
-      channelId,
+      actualChannelId,
       channelName,
       transcripts,
       totalViews,

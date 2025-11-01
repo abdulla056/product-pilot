@@ -54,6 +54,7 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
           channelId,
           videoCount: 10,
           depth: "standard",
+          useMockData: false,  // Use real YouTube data and transcription
         }),
       })
 
@@ -121,10 +122,18 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
             <div className="flex items-start gap-2">
               <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
               <div>
-                <h5 className="font-semibold text-yellow-900 text-sm mb-1">Analysis Time</h5>
-                <p className="text-xs text-yellow-700">
-                  This process analyzes your last 10 videos and may take 1-2 minutes. 
-                  We use advanced AI to ensure accurate insights.
+                <h5 className="font-semibold text-yellow-900 text-sm mb-1">Analysis Time & Requirements</h5>
+                <p className="text-xs text-yellow-700 mb-2">
+                  This process will:
+                </p>
+                <ul className="text-xs text-yellow-700 space-y-1 list-disc list-inside">
+                  <li>Fetch your last 10 videos from YouTube</li>
+                  <li>Download video transcripts/captions</li>
+                  <li>Analyze content with AI (Gemini 2.0)</li>
+                  <li>Takes 1-2 minutes depending on video length</li>
+                </ul>
+                <p className="text-xs text-yellow-700 mt-2 font-semibold">
+                  ⚠️ Your videos must have captions/subtitles enabled (auto-generated or manual)
                 </p>
               </div>
             </div>
@@ -150,13 +159,13 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
             ) : (
               <>
                 <Sparkles className="h-5 w-5 mr-2" />
-                Start AI Analysis
+                Analyze My YouTube Videos
               </>
             )}
           </Button>
 
           <p className="text-xs text-center text-gray-500">
-            For demo purposes, this uses mock data. Real transcription coming soon!
+            ✨ Using real YouTube transcription + AI analysis
           </p>
         </CardContent>
       </Card>

@@ -106,9 +106,10 @@ export interface CreatorGraph {
 
 export interface AnalysisRequest {
   userId: string
-  channelId: string
+  channelId?: string
   videoCount?: number
   depth?: "quick" | "standard" | "deep"
+  useMockData?: boolean
 }
 
 export interface AnalysisResponse {

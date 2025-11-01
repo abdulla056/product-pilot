@@ -97,7 +97,10 @@ export async function getMyYouTubeChannel(entityId: string) {
     console.log("[composio-helpers] Channel result:", JSON.stringify(channelResult, null, 2))
 
     // Check if we got channel data - handle both response structures
-    const channelItems = channelResult?.data?.response_data?.items || channelResult?.data?.items
+    // Actual API returns: data.channels (not data.items)
+    const channelItems = channelResult?.data?.channels || 
+                        channelResult?.data?.response_data?.items || 
+                        channelResult?.data?.items
     
     if (!channelItems || !Array.isArray(channelItems) || channelItems.length === 0) {
       console.log("[composio-helpers] No channel data found in response")

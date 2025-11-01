@@ -195,3 +195,54 @@ export async function getChannelIdByHandle(
     throw error
   }
 }
+
+/**
+ * List available captions for a video
+ * @param entityId - Entity/User ID
+ * @param videoId - YouTube video ID
+ * @returns Available caption tracks
+ */
+export async function listCaptions(entityId: string, videoId: string) {
+  try {
+    const entity = await composio.getEntity(entityId)
+    const result = await entity.execute({
+      actionName: "YOUTUBE_LIST_CAPTIONS",
+      params: {
+        videoId,
+        part: "snippet",
+      },
+    })
+    return result
+  } catch (error) {
+    console.error("Error listing captions:", error)
+    throw error
+  }
+}
+
+/**
+ * Download caption/transcript for a video
+ * @param entityId - Entity/User ID
+ * @param captionId - Caption track ID (from listCaptions)
+ * @param format - Format (srt, vtt, or sbv)
+ * @returns Caption text
+ */
+export async function downloadCaption(
+  entityId: string,
+  captionId: string,
+  format: "srt" | "vtt" | "sbv" = "srt"
+) {
+  try {
+    const entity = await composio.getEntity(entityId)
+    const result = await entity.execute({
+      actionName: "YOUTUBE_DOWNLOAD_CAPTION",
+      params: {
+        id: captionId,
+        tfmt: format,
+      },
+    })
+    return result
+  } catch (error) {
+    console.error("Error downloading caption:", error)
+    throw error
+  }
+}

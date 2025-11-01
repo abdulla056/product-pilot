@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Sparkles, TrendingUp, Package, Youtube } from "lucide-react"
 import { ConnectYouTubeButton } from "@/components/connect-youtube-button"
 import { AnalysisDashboard } from "@/components/analysis-dashboard"
+import { YouTubeVideosList } from "@/components/youtube-videos-list"
 import { getYouTubeConnection, getMyYouTubeChannel} from "@/lib/composio-helpers"
 
 export default async function DashboardPage() {
@@ -42,6 +43,13 @@ export default async function DashboardPage() {
             />
           </div>
         {/* )} */}
+
+        {/* YouTube Videos List - Show if YouTube connected */}
+        {youtubeConnection && (
+          <div className="mb-12">
+            <YouTubeVideosList />
+          </div>
+        )}
 
         {/* Quick Stats */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
