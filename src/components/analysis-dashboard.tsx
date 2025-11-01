@@ -54,7 +54,7 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
           channelId,
           videoCount: 10,
           depth: "standard",
-          useMockData: false,  // Use real YouTube data and transcription
+          useMockData: true,  // Use real YouTube data and transcription
         }),
       })
 
