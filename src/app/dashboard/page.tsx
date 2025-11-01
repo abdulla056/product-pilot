@@ -2,7 +2,8 @@ import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Sparkles, TrendingUp, Package } from "lucide-react"
+import { Sparkles, TrendingUp, Package, Youtube } from "lucide-react"
+import { ConnectYouTubeButton } from "@/components/connect-youtube-button"
 
 export default async function DashboardPage() {
   const user = await currentUser()
@@ -84,9 +85,7 @@ export default async function DashboardPage() {
                 <p className="text-sm text-gray-600 mb-3">
                   Link your YouTube, TikTok, Instagram, and other social accounts
                 </p>
-                <Button size="sm">
-                  Connect Platforms
-                </Button>
+                <ConnectYouTubeButton />
               </div>
             </div>
 

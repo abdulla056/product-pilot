@@ -6,6 +6,7 @@ A Next.js application that helps content creators turn their audience insights i
 
 - 🤖 **AI-Powered Product Discovery** - Analyzes your creator graph to suggest viable products
 - 📊 **Multi-Product Support** - Digital, physical, and service products
+- 🎥 **YouTube Integration** - Powered by Composio for seamless channel analysis
 - ✅ **Demand Validation** - Test ideas before investing in inventory
 - 🚀 **GTM Asset Generation** - Auto-generate landing pages and marketing materials
 - 🔐 **Authentication** - Powered by Clerk with Google, GitHub, Email, and more
@@ -30,6 +31,19 @@ CLERK_SECRET_KEY=sk_test_xxxxxxxxxxxxx
 ```
 
 See `docs/CLERK_SETUP.md` for detailed setup instructions.
+
+Next, set up Composio for YouTube integration:
+
+1. Create a free account at [platform.composio.dev](https://platform.composio.dev)
+2. Get your API key and create a YouTube auth config
+3. Add to `.env.local`:
+
+```bash
+COMPOSIO_API_KEY=comp_xxxxxxxxxxxxx
+YOUTUBE_AUTH_CONFIG_ID=ac_xxxxxxxxxxxxx
+```
+
+See `docs/COMPOSIO_SETUP.md` for detailed instructions.
 
 Run the development server:
 
@@ -119,6 +133,7 @@ See `docs/CLERK_SETUP.md` for detailed instructions.
 - **Styling:** Tailwind CSS 4
 - **UI Components:** Custom shadcn-inspired components
 - **Authentication:** Clerk
+- **YouTube Integration:** Composio
 - **Icons:** Lucide React
 - **TypeScript:** Full type safety
 
@@ -128,6 +143,7 @@ To learn more about the technologies used:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API
 - [Clerk Documentation](https://clerk.com/docs) - authentication and user management
+- [Composio Documentation](https://docs.composio.dev) - YouTube and social media integrations
 - [Tailwind CSS](https://tailwindcss.com/docs) - utility-first CSS framework
 - [Lucide Icons](https://lucide.dev) - beautiful & consistent icons
 

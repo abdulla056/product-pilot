@@ -1,5 +1,38 @@
 # ProductPilot Changelog
 
+## [2.1.0] - November 1, 2025
+
+### 🎉 YouTube Integration via Composio
+
+#### ✅ Added
+- **Composio Integration** - Full YouTube API integration via Composio
+  - `src/lib/composio.ts` - Composio helper functions
+  - `src/app/api/youtube/connect/route.ts` - YouTube OAuth endpoint
+  - `src/app/api/youtube/channel/route.ts` - Channel data endpoint
+  - `src/components/connect-youtube-button.tsx` - UI component for connecting
+  - `src/types/composio.ts` - TypeScript types for Composio responses
+- **Documentation**
+  - `docs/COMPOSIO_SETUP.md` - Complete setup guide
+  - `docs/COMPOSIO_QUICKSTART.md` - 5-minute quick start
+- **YouTube Features**
+  - Get channel statistics (subscribers, views, video count)
+  - List channel videos with performance data
+  - Get video details and engagement metrics
+  - Fetch channel activities and recent uploads
+  - Convert YouTube handles to channel IDs
+
+#### 📦 Dependencies Added
+- `composio-core` - Composio SDK
+- `@composio/openai` - OpenAI integration for Composio
+- `openai` - OpenAI API client
+
+#### 🔧 Updated
+- `.env.local` - Added Composio and OpenAI API keys
+- `README.md` - Added Composio setup instructions
+- `src/app/dashboard/page.tsx` - Added "Connect YouTube" button
+
+---
+
 ## [2.0.0] - November 1, 2025
 
 ### 🎉 Major Restructure - Moved to `src/` Directory
@@ -76,12 +109,19 @@
 
 ## Project Status
 
-**Current Version**: 2.0.0  
-**Status**: ✅ Production Ready  
+**Current Version**: 2.1.0  
+**Status**: ✅ Production Ready with YouTube Integration  
 **Last Updated**: November 1, 2025
 
+### Completed Features
+- ✅ Landing page with 6 sections
+- ✅ Clerk authentication
+- ✅ YouTube integration via Composio
+- ✅ Protected dashboard
+- ✅ Clean src/ directory structure
+
 ### Next Steps
-- [ ] Connect social media APIs
+- [ ] Add Instagram & TikTok integrations (Composio)
 - [ ] Build AI product discovery engine
 - [ ] Implement validation testing system
 - [ ] Add landing page generator
