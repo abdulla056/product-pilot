@@ -62,6 +62,33 @@ export interface ProductOpportunity {
     currency: string
   }
   validationSuggestions: string[]
+  // Business metrics (optional for backwards compatibility)
+  profitability?: {
+    score: number // 0-100
+    analysis: string
+    estimatedMargin: string // e.g., "40-60%"
+  }
+  viability?: {
+    score: number // 0-100
+    analysis: string
+    timeToMarket: string // e.g., "2-4 weeks"
+  }
+  sustainability?: {
+    score: number // 0-100
+    analysis: string
+    longTermPotential: string
+  }
+  opportunity?: {
+    score: number // 0-100
+    analysis: string
+    marketGap: string
+  }
+  impact?: {
+    score: number // 0-100
+    analysis: string
+    audienceValue: string
+  }
+  overallRating?: number // 0-100 (weighted average of all scores)
 }
 
 export interface MarketTrends {

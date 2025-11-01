@@ -37,7 +37,7 @@ export function ConnectYouTubeButton() {
       size="sm"
       onClick={handleConnect}
       disabled={isConnecting}
-      className="gap-2"
+      className="flex items-center gap-2 bg-[var(--color-accent-primary)] hover:bg-[var(--color-accent-primary)]/80 text-[var(--color-text-dark)] font-semibold"
     >
       {isConnecting ? (
         <>

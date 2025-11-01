@@ -152,32 +152,14 @@ export function YouTubeVideosList() {
   }
 
   return (
-    <Card>
+    <Card className="bg-[var(--color-bg-card)] border-2 border-[var(--color-border-subtle)] shadow-lg">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <Youtube className="h-5 w-5 text-red-600" />
-              Your YouTube Videos
-            </CardTitle>
-            <CardDescription>
-              {channelInfo?.title && `${channelInfo.title} • `}
-              {videos.length} of {channelInfo?.videoCount || videos.length} videos
-            </CardDescription>
-          </div>
-          {channelInfo && (
-            <div className="flex gap-4 text-sm text-gray-600">
-              <div>
-                <span className="font-semibold">{parseInt(channelInfo.subscriberCount).toLocaleString()}</span>
-                <span className="ml-1">subscribers</span>
-              </div>
-              <div>
-                <span className="font-semibold">{parseInt(channelInfo.viewCount).toLocaleString()}</span>
-                <span className="ml-1">views</span>
-              </div>
-            </div>
-          )}
-        </div>
+        <CardTitle className="text-2xl font-bold text-[var(--color-text-primary)]">
+          Your YouTube Videos
+        </CardTitle>
+        <CardDescription className="text-[var(--color-text-secondary)]">
+          Recent uploads from your channel
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
