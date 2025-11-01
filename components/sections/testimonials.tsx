@@ -11,7 +11,7 @@ export function Testimonials() {
       platformIcon: Youtube,
       platformColor: "text-red-500",
       image: "SC",
-      quote: "Finally a tool that helps me know what to sell next! I launched my first digital product in 2 weeks and made $5K.",
+      quote: "ProductPilot analyzed my audience and suggested a course I never considered. Launched in 2 weeks, made $5K in pre-orders!",
       rating: 5
     },
     {
@@ -22,7 +22,7 @@ export function Testimonials() {
       platformIcon: "🎵",
       platformColor: "text-gray-700",
       image: "MR",
-      quote: "ProductPilot analyzed my content and suggested 3 products I never thought of. One of them is now my main income source!",
+      quote: "It suggested a physical product based on my audience comments. Validated demand before production. Now it's my main revenue stream!",
       rating: 5
     },
     {
@@ -33,7 +33,7 @@ export function Testimonials() {
       platformIcon: Instagram,
       platformColor: "text-pink-500",
       image: "EW",
-      quote: "The validation feature is genius. I tested 3 ideas before building anything and saved myself months of wasted effort.",
+      quote: "I tested a coaching service, digital guide, and merch line. The data showed exactly which one to launch first. Saved months!",
       rating: 5
     }
   ]

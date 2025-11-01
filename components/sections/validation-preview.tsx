@@ -23,24 +23,24 @@ export function ValidationPreview() {
               {/* Mock Product Header */}
               <div className="text-center mb-8">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-100 rounded-full mb-4">
-                  <span className="text-sm font-semibold text-purple-600">New Product Idea</span>
+                  <span className="text-sm font-semibold text-purple-600">Physical Product Idea</span>
                 </div>
                 <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                  AI Content Templates Pack
+                  Signature Recipe Kit
                 </h3>
                 <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
-                  50+ proven templates based on your top-performing content. 
-                  Save hours of brainstorming and create viral posts faster.
+                  Your 3 most-requested recipes as a premium ingredient kit. 
+                  Based on 2,847 "drop the recipe" comments and 92K saves.
                 </p>
                 
                 {/* Price tag */}
                 <div className="inline-flex items-baseline gap-2">
                   <span className="text-5xl font-bold bg-linear-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
-                    $29
+                    $47
                   </span>
-                  <span className="text-gray-500 line-through text-xl">$49</span>
+                  <span className="text-gray-500 line-through text-xl">$69</span>
                   <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
-                    Early Bird
+                    Pre-Order
                   </span>
                 </div>
               </div>
@@ -78,18 +78,18 @@ export function ValidationPreview() {
           <div className="grid md:grid-cols-3 gap-6 mt-12">
             <div className="text-center">
               <div className="text-3xl mb-2">⚡</div>
-              <h4 className="font-semibold text-gray-900 mb-1">Instant Setup</h4>
-              <p className="text-sm text-gray-600">Landing page ready in 60 seconds</p>
+              <h4 className="font-semibold text-gray-900 mb-1">Instant Validation</h4>
+              <p className="text-sm text-gray-600">Test ideas before investing in inventory</p>
             </div>
             <div className="text-center">
               <div className="text-3xl mb-2">📊</div>
-              <h4 className="font-semibold text-gray-900 mb-1">Real Analytics</h4>
-              <p className="text-sm text-gray-600">Track interest & conversion rates</p>
+              <h4 className="font-semibold text-gray-900 mb-1">Real Demand Data</h4>
+              <p className="text-sm text-gray-600">Know exactly what your audience will buy</p>
             </div>
             <div className="text-center">
-              <div className="text-3xl mb-2">🎯</div>
-              <h4 className="font-semibold text-gray-900 mb-1">Smart Insights</h4>
-              <p className="text-sm text-gray-600">AI suggests pricing & positioning</p>
+              <div className="text-3xl mb-2">🚀</div>
+              <h4 className="font-semibold text-gray-900 mb-1">GTM Ready</h4>
+              <p className="text-sm text-gray-600">Get marketing assets & fulfillment partners</p>
             </div>
           </div>
         </div>

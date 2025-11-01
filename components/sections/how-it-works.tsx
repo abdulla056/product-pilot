@@ -1,12 +1,12 @@
 import { Card } from "@/components/ui/card"
-import { Brain, Link2, Rocket, Youtube, Instagram } from "lucide-react"
+import { Brain, Link2, Rocket, Youtube, Instagram, BarChart3, Package, Zap } from "lucide-react"
 
 export function HowItWorks() {
   const steps = [
     {
       icon: Link2,
-      title: "Connect your socials",
-      description: "Link your YouTube, TikTok, and Instagram accounts for AI analysis",
+      title: "Read your creator graph",
+      description: "Connect socials, content, audience feedback, and sales history for deep analysis",
       platforms: [
         { name: "YouTube", icon: Youtube, color: "text-red-500" },
         { name: "Instagram", icon: Instagram, color: "text-pink-500" },
@@ -15,15 +15,21 @@ export function HowItWorks() {
     },
     {
       icon: Brain,
-      title: "AI analyzes your audience & content",
-      description: "Our AI engine discovers patterns in what your audience loves most",
+      title: "Discover product opportunities",
+      description: "AI infers viable digital, service, and physical product ideas from your data",
       gradient: "from-purple-500 to-blue-500"
     },
     {
+      icon: BarChart3,
+      title: "Validate with experiments",
+      description: "Test demand with auto-generated landing pages and real audience feedback",
+      gradient: "from-blue-500 to-cyan-500"
+    },
+    {
       icon: Rocket,
-      title: "Get 3 product ideas + landing pages",
-      description: "Ready-to-test products with pre-built landing pages in seconds",
-      gradient: "from-blue-500 to-purple-600"
+      title: "Launch with GTM assets",
+      description: "Get marketing materials, fulfillment setup, and tooling recommendations",
+      gradient: "from-cyan-500 to-purple-600"
     }
   ]
 
@@ -35,11 +41,11 @@ export function HowItWorks() {
             How It Works
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            From audience insights to sellable products in 3 simple steps
+            From creator insights to validated products ready to launch
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {steps.map((step, index) => {
             const Icon = step.icon
             return (

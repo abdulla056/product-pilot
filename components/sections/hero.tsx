@@ -16,7 +16,7 @@ export function Hero() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-purple-200 rounded-full shadow-sm">
             <Sparkles className="w-4 h-4 text-purple-600" />
-            <span className="text-sm font-medium text-purple-600">AI-Powered Product Intelligence</span>
+            <span className="text-sm font-medium text-purple-600">Creator Graph → Product → Launch</span>
           </div>
 
           {/* Headline */}
@@ -29,7 +29,7 @@ export function Hero() {
 
           {/* Subheadline */}
           <p className="text-xl md:text-2xl text-gray-600 max-w-3xl">
-            Turn your audience insights into ready-to-launch product ideas — in minutes.
+            Analyze your creator graph, discover viable product opportunities, validate demand, and launch — all powered by AI.
           </p>
 
           {/* CTA Buttons */}
@@ -59,10 +59,10 @@ export function Hero() {
                     </div>
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">
-                    AI Content Templates
+                    Premium Course Bundle
                   </h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    Pre-made templates for viral content creation based on your top posts
+                    Digital course teaching your proven strategies to engaged followers
                   </p>
                   <Button size="sm" className="w-full">
                     Generate Landing Page
@@ -80,10 +80,10 @@ export function Hero() {
                     </div>
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">
-                    Creator Toolkit Bundle
+                    Branded Merchandise
                   </h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    Complete digital asset pack with editing presets and scripts
+                    Custom apparel line based on your most popular catchphrases
                   </p>
                   <Button size="sm" className="w-full">
                     Generate Landing Page
@@ -101,10 +101,10 @@ export function Hero() {
                     </div>
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">
-                    1-on-1 Coaching Call
+                    1-on-1 Coaching Service
                   </h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    Personalized strategy session to scale your creator business
+                    Personalized consultation based on audience demand signals
                   </p>
                   <Button size="sm" className="w-full">
                     Generate Landing Page

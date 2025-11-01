@@ -24,7 +24,7 @@ export function CTAFooter() {
             </h2>
             
             <p className="text-xl text-purple-100 mb-10 max-w-2xl mx-auto">
-              Join the waitlist and be among the first creators to turn audience insights into revenue.
+              Join the waitlist and turn your creator graph into digital, service, and physical products that sell.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
