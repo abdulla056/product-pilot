@@ -268,7 +268,7 @@ export async function generateProductOpportunities(
   attempt = 1
 ): Promise<ProductOpportunity[]> {
   const prompt = `
-You are an expert product strategist specializing in creator economy products. Generate viable product opportunities.
+You are an expert product strategist specializing in creator economy products. Generate viable product opportunities with detailed business metrics.
 
 Content Analysis:
 ${JSON.stringify(contentAnalysis, null, 2)}
@@ -278,7 +278,17 @@ ${JSON.stringify(audienceAnalysis, null, 2)}
 
 ${attempt > 1 ? "⚠️ SECOND ATTEMPT: Previous products were too generic. Be more specific and creative." : ""}
 
-Generate 6-8 diverse product opportunities across digital products, physical products, and services in this JSON format:
+Generate 6-8 diverse product opportunities across digital products, physical products, and services.
+
+For each product, provide comprehensive business analysis including:
+- Profitability: Profit margins, revenue potential, cost structure
+- Viability: Feasibility, resources needed, time to market
+- Sustainability: Long-term potential, scalability, evergreen nature
+- Opportunity: Market gap, timing, competitive advantage
+- Impact: Value to audience, transformation potential, social impact
+- Overall Rating: Weighted score based on all factors
+
+Respond in this JSON format:
 {
   "products": [
     {
@@ -296,10 +306,46 @@ Generate 6-8 diverse product opportunities across digital products, physical pro
         "max": 0,
         "currency": "USD"
       },
-      "validationSuggestions": ["how", "to", "validate", "this"]
+      "validationSuggestions": ["how", "to", "validate", "this"],
+      "profitability": {
+        "score": 0-100,
+        "analysis": "Detailed profitability analysis including margins and revenue potential",
+        "estimatedMargin": "e.g., 40-60%"
+      },
+      "viability": {
+        "score": 0-100,
+        "analysis": "Feasibility assessment including resources and barriers",
+        "timeToMarket": "e.g., 2-4 weeks"
+      },
+      "sustainability": {
+        "score": 0-100,
+        "analysis": "Long-term potential and scalability analysis",
+        "longTermPotential": "Assessment of evergreen vs trending nature"
+      },
+      "opportunity": {
+        "score": 0-100,
+        "analysis": "Market gap analysis and competitive positioning",
+        "marketGap": "Description of unmet need this fills"
+      },
+      "impact": {
+        "score": 0-100,
+        "analysis": "Value creation for audience and transformation potential",
+        "audienceValue": "How this solves audience pain points"
+      },
+      "overallRating": 0-100
     }
   ]
 }
+
+SCORING GUIDELINES:
+- Profitability (0-100): Consider margins, pricing power, cost structure
+- Viability (0-100): Assess resources needed, technical complexity, execution difficulty
+- Sustainability (0-100): Evaluate scalability, evergreen nature, market longevity
+- Opportunity (0-100): Analyze market timing, competition, demand trends
+- Impact (0-100): Measure audience value, problem-solution fit, transformation potential
+- Overall Rating: Weighted average (Profitability 25%, Viability 20%, Sustainability 20%, Opportunity 20%, Impact 15%)
+
+Be data-driven, specific, and realistic in your assessments.
 `
 
   try {
@@ -329,7 +375,7 @@ Generate 6-8 diverse product opportunities across digital products, physical pro
           ...product,
           reasoning: `${product.reasoning}
 
-Market Validation: ${validation}`,
+Market Validation: Competition is ${validation.competition}, Market demand is ${validation.marketDemand}`,
           confidence: Math.min(product.confidence * 1.1, 1.0) // Boost confidence if validated
         }
       })
@@ -337,11 +383,13 @@ Market Validation: ${validation}`,
 
     // 🤖 AGENTIC: Self-reflection on product quality
     const avgConfidence = validatedProducts.reduce((sum, p) => sum + p.confidence, 0) / validatedProducts.length
+    const avgRating = validatedProducts.reduce((sum, p) => sum + (p.overallRating || 0), 0) / validatedProducts.length
     
     console.log(`🤖 Agent reflecting on Product Opportunity Generation (attempt ${attempt})`)
     console.log(`📊 Average product confidence: ${avgConfidence.toFixed(2)}`)
+    console.log(`⭐ Average overall rating: ${avgRating.toFixed(1)}/100`)
     
-    if (avgConfidence < 0.6 && attempt < 2) {
+    if ((avgConfidence < 0.6 || avgRating < 60) && attempt < 2) {
       console.log("🤖 Agent decision: Product quality too low, retrying with enhanced creativity...")
       return generateProductOpportunities(contentAnalysis, audienceAnalysis, transcripts, attempt + 1)
     }
@@ -490,9 +538,9 @@ export async function analyzeCreatorGraph(
     transcripts
   )
 
-  // Sort and categorize recommendations
+  // Sort by overall rating (new comprehensive metric)
   const sortedProducts = [...productOpportunities].sort(
-    (a, b) => b.confidence - a.confidence
+    (a, b) => (b.overallRating || 0) - (a.overallRating || 0)
   )
 
   const creatorGraph: CreatorGraph = {
@@ -511,10 +559,10 @@ export async function analyzeCreatorGraph(
     recommendations: {
       topProducts: sortedProducts.slice(0, 2),
       quickWins: sortedProducts
-        .filter((p) => p.category === "digital")
+        .filter((p) => (p.viability?.score ?? 0) >= 70 && p.viability?.timeToMarket?.includes("week"))
         .slice(0, 2),
       longTermBets: sortedProducts
-        .filter((p) => p.category === "service" || p.estimatedDemand !== "low")
+        .filter((p) => (p.sustainability?.score ?? 0) >= 75)
         .slice(0, 2),
     },
   }

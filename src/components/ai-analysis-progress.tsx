@@ -21,25 +21,25 @@ const ANALYSIS_STEPS = [
     id: 1,
     label: "Analyzing content patterns",
     icon: Brain,
-    duration: 20,
+    duration: 60,
   },
   {
     id: 2,
     label: "Understanding your audience",
     icon: Users,
-    duration: 20,
+    duration: 60,
   },
   {
     id: 3,
     label: "Researching market trends",
     icon: TrendingUp,
-    duration: 30,
+    duration: 60,
   },
   {
     id: 4,
     label: "Generating product opportunities",
     icon: Package,
-    duration: 30,
+    duration: 60,
   },
 ]
 
@@ -117,7 +117,7 @@ export function AIAnalysisProgress({ open, onOpenChange }: AIAnalysisProgressPro
                   key={step.id}
                   className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
                     isCurrent
-                      ? "bg-purple-50 border-2 border-purple-200"
+                      ? "bg-purple-50 border-2 border-purple-600"
                       : isComplete
                       ? "bg-green-50 border border-green-200"
                       : "bg-gray-50 border border-gray-200"
