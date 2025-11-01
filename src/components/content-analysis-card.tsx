@@ -10,18 +10,15 @@ export function ContentAnalysisCard({ analysis }: ContentAnalysisCardProps) {
   const confidencePercentage = Math.round((analysis.confidence || 0) * 100)
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>Content Analysis</CardTitle>
-          <Badge variant={(analysis.confidence || 0) > 0.8 ? "default" : "secondary"}>
-            {confidencePercentage}% confidence
-          </Badge>
-        </div>
-        <CardDescription>AI-powered analysis of your content patterns</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Genre */}
+    <div className="space-y-6">
+      {/* Confidence Badge */}
+      <div className="flex items-center justify-end">
+        <Badge variant={(analysis.confidence || 0) > 0.8 ? "default" : "secondary"}>
+          {confidencePercentage}% confidence
+        </Badge>
+      </div>
+
+      {/* Genre */}
         <div>
           <h4 className="text-sm font-semibold text-gray-700 mb-2">Primary Genre</h4>
           <p className="text-lg font-medium text-purple-600">{analysis.genre || "Not available"}</p>
@@ -95,7 +92,6 @@ export function ContentAnalysisCard({ analysis }: ContentAnalysisCardProps) {
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+    </div>
   )
 }

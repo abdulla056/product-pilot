@@ -11,21 +11,15 @@ export function AudienceAnalysisCard({ analysis }: AudienceAnalysisCardProps) {
   const confidencePercentage = Math.round((analysis.confidence || 0) * 100)
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-purple-600" />
-            Audience Insights
-          </CardTitle>
-          <Badge variant={(analysis.confidence || 0) > 0.8 ? "default" : "secondary"}>
-            {confidencePercentage}% confidence
-          </Badge>
-        </div>
-        <CardDescription>Deep analysis of your audience demographics and behavior</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Demographics */}
+    <div className="space-y-6">
+      {/* Confidence Badge */}
+      <div className="flex items-center justify-end">
+        <Badge variant={(analysis.confidence || 0) > 0.8 ? "default" : "secondary"}>
+          {confidencePercentage}% confidence
+        </Badge>
+      </div>
+
+      {/* Demographics */}
         {analysis.primaryDemographic && (
           <div className="bg-purple-50 rounded-lg p-4">
             <h4 className="text-sm font-semibold text-gray-900 mb-3">Primary Demographic</h4>
@@ -140,7 +134,6 @@ export function AudienceAnalysisCard({ analysis }: AudienceAnalysisCardProps) {
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+    </div>
   )
 }

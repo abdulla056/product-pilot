@@ -2,14 +2,16 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { ContentAnalysisCard } from "@/components/content-analysis-card"
 import { AudienceAnalysisCard } from "@/components/audience-analysis-card"
 import { ProductOpportunitiesCard } from "@/components/product-opportunities-card"
 import { MarketTrendsCard } from "@/components/market-trends-card"
 import { AIAnalysisProgress } from "@/components/ai-analysis-progress"
 import type { CreatorGraph } from "@/types/analysis"
-import { Sparkles, Loader2, CheckCircle, AlertCircle } from "lucide-react"
+import { Sparkles, Loader2, CheckCircle, AlertCircle, Brain, Users, TrendingUp, Package, ChevronDown, ChevronUp } from "lucide-react"
 
 interface AnalysisDashboardProps {
   channelId: string
@@ -21,6 +23,21 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showProgress, setShowProgress] = useState(false)
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(
+    new Set(['content', 'audience', 'market', 'recommendations'])
+  )
+
+  const toggleSection = (section: string) => {
+    setExpandedSections(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(section)) {
+        newSet.delete(section)
+      } else {
+        newSet.add(section)
+      }
+      return newSet
+    })
+  }
 
   const runAnalysis = async () => {
     setLoading(true)
@@ -197,21 +214,149 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
       {/* Product Opportunities - Highlighted First */}
       <ProductOpportunitiesCard opportunities={analysis.productOpportunities} />
 
-      {/* Analysis Cards */}
-      <div className="grid md:grid-cols-2 gap-6">
-        <ContentAnalysisCard analysis={analysis.contentAnalysis} />
-        <AudienceAnalysisCard analysis={analysis.audienceAnalysis} />
-      </div>
+      {/* Analysis Cards - Full Width & Collapsible */}
+      <div className="space-y-4">
+        {/* Content Analysis */}
+        <Card className="border-2 border-purple-200 hover:shadow-lg transition-shadow">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-purple-100 rounded-lg">
+                  <Brain className="h-5 w-5 text-purple-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg">Content Analysis</CardTitle>
+                  <CardDescription>AI-powered analysis of your content patterns</CardDescription>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <Badge variant={(analysis.contentAnalysis.confidence || 0) > 0.8 ? "default" : "secondary"}>
+                  {Math.round((analysis.contentAnalysis.confidence || 0) * 100)}%
+                </Badge>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleSection('content')}
+                  className="flex items-center gap-2"
+                >
+                  {expandedSections.has('content') ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          {expandedSections.has('content') && (
+            <CardContent>
+              <ContentAnalysisCard analysis={analysis.contentAnalysis} />
+            </CardContent>
+          )}
+        </Card>
 
-      {/* Market Trends */}
-      <MarketTrendsCard trends={analysis.marketTrends} />
+        {/* Audience Insights */}
+        <Card className="border-2 border-blue-200 hover:shadow-lg transition-shadow">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <Users className="h-5 w-5 text-blue-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg">Audience Insights</CardTitle>
+                  <CardDescription>Deep analysis of your audience demographics</CardDescription>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <Badge variant={(analysis.audienceAnalysis.confidence || 0) > 0.8 ? "default" : "secondary"}>
+                  {Math.round((analysis.audienceAnalysis.confidence || 0) * 100)}%
+                </Badge>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleSection('audience')}
+                  className="flex items-center gap-2"
+                >
+                  {expandedSections.has('audience') ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          {expandedSections.has('audience') && (
+            <CardContent>
+              <AudienceAnalysisCard analysis={analysis.audienceAnalysis} />
+            </CardContent>
+          )}
+        </Card>
+
+        {/* Market Trends */}
+        <Card className="border-2 border-green-200 hover:shadow-lg transition-shadow">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <TrendingUp className="h-5 w-5 text-green-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg">Market Trends</CardTitle>
+                  <CardDescription>Current trends relevant to your niche</CardDescription>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <Badge variant="secondary" className="bg-green-100 text-green-700">
+                  {analysis.marketTrends.trendingProducts?.length || 0} trends
+                </Badge>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleSection('market')}
+                  className="flex items-center gap-2"
+                >
+                  {expandedSections.has('market') ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          {expandedSections.has('market') && (
+            <CardContent>
+              <MarketTrendsCard trends={analysis.marketTrends} />
+            </CardContent>
+          )}
+        </Card>
+      </div>
 
       {/* Recommendations Summary */}
       <Card className="border-2 border-green-200 bg-linear-to-br from-green-50 to-emerald-50">
         <CardHeader>
-          <CardTitle className="text-xl">🎯 Recommended Next Steps</CardTitle>
-          <CardDescription>Based on AI analysis, here's what to focus on</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-xl">🎯 Recommended Next Steps</CardTitle>
+              <CardDescription>Based on AI analysis, here's what to focus on</CardDescription>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => toggleSection('recommendations')}
+              className="flex items-center gap-2"
+            >
+              {expandedSections.has('recommendations') ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
         </CardHeader>
+        {expandedSections.has('recommendations') && (
         <CardContent className="space-y-4">
           <div>
             <h4 className="font-semibold text-gray-900 mb-2">Top Priority Products</h4>
@@ -240,6 +385,7 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
             </div>
           </div>
         </CardContent>
+        )}
       </Card>
       </div>
     </>

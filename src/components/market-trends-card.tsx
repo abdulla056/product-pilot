@@ -9,16 +9,8 @@ interface MarketTrendsCardProps {
 
 export function MarketTrendsCard({ trends }: MarketTrendsCardProps) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <TrendingUp className="h-5 w-5 text-green-600" />
-          Market Trends & Insights
-        </CardTitle>
-        <CardDescription>Current trends relevant to your niche</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Trending Products */}
+    <div className="space-y-6">
+      {/* Trending Products */}
         {trends.trendingProducts && trends.trendingProducts.length > 0 && (
           <div>
             <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
@@ -111,7 +103,6 @@ export function MarketTrendsCard({ trends }: MarketTrendsCardProps) {
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+    </div>
   )
 }

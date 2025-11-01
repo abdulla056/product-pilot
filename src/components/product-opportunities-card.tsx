@@ -2,13 +2,30 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import type { ProductOpportunity } from "@/types/analysis"
-import { Package, DollarSign, Target, TrendingUp, Lightbulb } from "lucide-react"
+import { Package, DollarSign, Target, TrendingUp, Lightbulb, ChevronDown, ChevronUp } from "lucide-react"
+import { useState } from "react"
 
 interface ProductOpportunitiesProps {
   opportunities: ProductOpportunity[]
 }
 
 export function ProductOpportunitiesCard({ opportunities }: ProductOpportunitiesProps) {
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(
+    new Set(opportunities.map(o => o.id))
+  )
+  
+  const toggleCard = (id: string) => {
+    setExpandedCards(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(id)) {
+        newSet.delete(id)
+      } else {
+        newSet.add(id)
+      }
+      return newSet
+    })
+  }
+  
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case "digital":
@@ -38,19 +55,21 @@ export function ProductOpportunitiesCard({ opportunities }: ProductOpportunities
   const sortedOpportunities = [...opportunities].sort((a, b) => b.confidence - a.confidence)
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-2xl font-bold text-gray-900">Product Opportunities</h3>
-          <p className="text-gray-600">AI-generated product ideas based on your content and audience</p>
+      <div className="max-w-7xl mx-auto space-y-4">
+        <div className="flex items-center justify-between bg-white rounded-lg shadow-sm p-4 border border-gray-200">
+          <div>
+            <h3 className="text-2xl font-bold text-gray-900">Product Opportunities</h3>
+            <p className="text-gray-600">AI-generated product ideas based on your content and audience</p>
+          </div>
+          <Badge className="bg-purple-600 text-white">
+            {opportunities.length} opportunities found
+          </Badge>
         </div>
-        <Badge className="bg-purple-600 text-white">
-          {opportunities.length} opportunities found
-        </Badge>
-      </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
-        {sortedOpportunities.map((product) => (
+        <div className="space-y-4">
+          {sortedOpportunities.map((product) => {
+            const isExpanded = expandedCards.has(product.id)
+            return (
           <Card key={product.id} className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <div className="flex items-start justify-between">
@@ -61,6 +80,18 @@ export function ProductOpportunitiesCard({ opportunities }: ProductOpportunities
                     <CardDescription className="mt-1">{product.targetAudience}</CardDescription>
                   </div>
                 </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleCard(product.id)}
+                  className="flex items-center gap-2"
+                >
+                  {isExpanded ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                </Button>
               </div>
               <div className="flex gap-2 mt-3">
                 <Badge variant="outline" className="capitalize">
@@ -74,6 +105,7 @@ export function ProductOpportunitiesCard({ opportunities }: ProductOpportunities
                 </Badge>
               </div>
             </CardHeader>
+            {isExpanded && (
             <CardContent className="space-y-4">
               {/* Description */}
               <p className="text-sm text-gray-600">{product.description}</p>
@@ -135,9 +167,11 @@ export function ProductOpportunitiesCard({ opportunities }: ProductOpportunities
                 Start Validation
               </Button>
             </CardContent>
+            )}
           </Card>
-        ))}
+            )
+          })}
+        </div>
       </div>
-    </div>
   )
 }
