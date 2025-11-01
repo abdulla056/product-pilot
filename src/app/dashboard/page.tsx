@@ -1,8 +1,11 @@
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Sparkles, TrendingUp, Package } from "lucide-react"
+import { Sparkles, TrendingUp, Package, Youtube } from "lucide-react"
+import { ConnectYouTubeButton } from "@/components/connect-youtube-button"
+import { AnalysisDashboard } from "@/components/analysis-dashboard"
+import { YouTubeVideosList } from "@/components/youtube-videos-list"
+import { getYouTubeConnection, getMyYouTubeChannel} from "@/lib/composio-helpers"
 
 export default async function DashboardPage() {
   const user = await currentUser()
@@ -10,6 +13,13 @@ export default async function DashboardPage() {
   if (!user) {
     redirect("/sign-in")
   }
+
+  // Check if user has YouTube connected and fetch data
+  const youtubeConnection = await getYouTubeConnection(user.id)
+  const youtubeChannel = youtubeConnection ? await getMyYouTubeChannel(user.id) : null
+  
+  // Get videos if we have channel data
+  const channelId = (youtubeChannel as any)?.channelId
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -23,6 +33,23 @@ export default async function DashboardPage() {
             Your creator product development hub
           </p>
         </div>
+
+        {/* AI Analysis Dashboard - Show if YouTube connected */}
+        {/* {youtubeConnection && channelId && ( */}
+          <div className="mb-12">
+            <AnalysisDashboard 
+              channelId={channelId} 
+              channelName={(youtubeChannel as any)?.items?.[0]?.snippet?.title || "Your Channel"}
+            />
+          </div>
+        {/* )} */}
+
+        {/* YouTube Videos List - Show if YouTube connected */}
+        {youtubeConnection && (
+          <div className="mb-12">
+            <YouTubeVideosList />
+          </div>
+        )}
 
         {/* Quick Stats */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
@@ -84,9 +111,16 @@ export default async function DashboardPage() {
                 <p className="text-sm text-gray-600 mb-3">
                   Link your YouTube, TikTok, Instagram, and other social accounts
                 </p>
-                <Button size="sm">
-                  Connect Platforms
-                </Button>
+                {youtubeConnection ? (
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 text-green-700 rounded-md text-sm font-medium">
+                      <Youtube className="h-4 w-4" />
+                      YouTube Connected ✓
+                    </div>
+                  </div>
+                ) : (
+                  <ConnectYouTubeButton />
+                )}
               </div>
             </div>
 
