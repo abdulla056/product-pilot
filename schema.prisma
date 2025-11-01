@@ -18,16 +18,16 @@ model User {
 
 model YouTubeConnection {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  entityId       String // stores Clerk user id (not ObjectId)
+  userId         String?  @db.ObjectId
   provider       String
   connectedAt    DateTime @default(now())
   connectionData Json
-  user           User?    @relation(fields: [entityId], references: [clerkId])
+  user           User?    @relation(fields: [userId], references: [id])
 }
 
 model Analysis {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String // stores Clerk user id (matches User.clerkId)
+  userId      String   @db.ObjectId
   channelId   String
   channelName String?
   videoCount  Int
@@ -36,7 +36,7 @@ model Analysis {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  user             User              @relation(fields: [userId], references: [clerkId])
+  user             User              @relation(fields: [userId], references: [id])
   videoTranscripts VideoTranscript[]
   agentDecisions   AgentDecision[]
 }
