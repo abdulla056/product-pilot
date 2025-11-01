@@ -3,16 +3,16 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-base)] disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "bg-linear-to-r from-purple-600 to-blue-500 text-white shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105",
+          "bg-[var(--color-accent-primary)] text-[var(--color-text-dark)] shadow-lg shadow-[var(--color-accent-glow)] hover:shadow-xl hover:shadow-[var(--color-accent-primary)]/40 hover:scale-105",
         secondary:
-          "border-2 border-purple-600 text-purple-600 hover:bg-purple-50 hover:scale-105",
-        ghost: "hover:bg-purple-50 text-purple-600",
-        link: "text-purple-600 underline-offset-4 hover:underline",
+          "border-2 border-[var(--color-accent-primary)] text-[var(--color-accent-primary)] hover:bg-[var(--color-accent-glow)] hover:scale-105",
+        ghost: "hover:bg-[var(--color-accent-glow)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
+        link: "text-[var(--color-accent-primary)] underline-offset-4 hover:underline",
       },
       size: {
         default: "h-12 px-8 py-3",
