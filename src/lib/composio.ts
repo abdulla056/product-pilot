@@ -13,11 +13,13 @@ export const YOUTUBE_AUTH_CONFIG_ID = process.env.YOUTUBE_AUTH_CONFIG_ID || ""
  * Initialize YouTube connection for a user
  * @param entityId - Entity/User ID
  * @param authConfigId - YouTube auth config ID from Composio dashboard
+ * @param redirectUrl - URL to redirect after OAuth (optional)
  * @returns Connection details
  */
 export async function initializeYouTubeConnection(
   entityId: string,
-  authConfigId?: string
+  authConfigId?: string,
+  redirectUrl?: string
 ) {
   try {
     const configId = authConfigId || YOUTUBE_AUTH_CONFIG_ID
@@ -35,6 +37,7 @@ export async function initializeYouTubeConnection(
       authConfig: {
         authConfigId: configId,
       },
+      redirectUri: redirectUrl,
     })
 
     return {
