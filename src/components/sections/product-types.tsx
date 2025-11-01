@@ -1,96 +1,69 @@
-import { Card } from "@/components/ui/card"
-import { Package, Laptop, Users } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Code, Package, Users } from "lucide-react"
 
 export function ProductTypes() {
-  const types = [
+  const productTypes = [
     {
-      icon: Laptop,
+      icon: Code,
       title: "Digital Products",
-      description: "Courses, templates, guides, and downloadable resources",
-      examples: ["Online courses", "E-books & guides", "Templates & presets", "Exclusive content"],
-      color: "from-purple-500 to-blue-500"
+      description: "E-books, courses, templates, and software. High-margin, instant delivery, no inventory.",
+      features: ["Unlimited scalability", "Instant delivery", "Low overhead"],
     },
     {
       icon: Package,
       title: "Physical Products",
-      description: "Merchandise, kits, and branded goods your audience wants",
-      examples: ["Branded apparel", "Recipe/craft kits", "Limited editions", "Accessories"],
-      color: "from-blue-500 to-cyan-500"
+      description: "Merchandise, apparel, equipment, and branded goods. Build a tangible brand presence.",
+      features: ["Brand recognition", "Physical presence", "Collectible value"],
     },
     {
       icon: Users,
-      title: "Services",
-      description: "Coaching, consulting, and personalized experiences",
-      examples: ["1-on-1 coaching", "Group programs", "Consulting calls", "Workshops"],
-      color: "from-cyan-500 to-purple-500"
-    }
+      title: "Service Products",
+      description: "Coaching, consulting, memberships, and communities. Build ongoing relationships.",
+      features: ["Recurring revenue", "Personal connection", "Scalable delivery"],
+    },
   ]
 
   return (
-    <section className="py-20 md:py-32 bg-white border-t border-gray-100">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full mb-6">
-            <span className="text-sm font-semibold text-purple-600">Every Product Type</span>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Digital, Physical, or Service
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            ProductPilot discovers opportunities across all product categories based on your unique creator graph
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {types.map((type, index) => {
-            const Icon = type.icon
+    <section className="py-20 px-4">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 text-[var(--color-text-primary)]">
+          Product Types We Support
+        </h2>
+        <p className="text-xl text-center text-[var(--color-text-secondary)] mb-12 max-w-2xl mx-auto">
+          From digital downloads to physical merchandise, we help you find the perfect product for your audience
+        </p>
+        <div className="grid md:grid-cols-3 gap-8">
+          {productTypes.map((product, index) => {
+            const Icon = product.icon
             return (
-              <Card key={index} className="p-8 hover:shadow-2xl transition-all hover:-translate-y-2 border-2 border-transparent hover:border-purple-200">
-                {/* Icon with gradient */}
-                <div className="relative mb-6">
-                  <div className={`w-16 h-16 rounded-2xl bg-linear-to-br ${type.color} opacity-10`} />
-                  <div className={`absolute inset-0 flex items-center justify-center`}>
-                    <Icon className="w-8 h-8 text-purple-600" />
+              <Card key={index} className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] hover:border-[var(--color-accent-primary)] transition-colors">
+                <CardHeader>
+                  <div className="mb-4">
+                    <Icon className="w-12 h-12 text-[var(--color-accent-primary)]" />
                   </div>
-                </div>
-
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  {type.title}
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  {type.description}
-                </p>
-
-                {/* Examples list */}
-                <ul className="space-y-2">
-                  {type.examples.map((example, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
-                      <div className="w-1.5 h-1.5 rounded-full bg-purple-600" />
-                      {example}
-                    </li>
-                  ))}
-                </ul>
+                  <CardTitle className="text-2xl text-[var(--color-text-primary)] mb-2">
+                    {product.title}
+                  </CardTitle>
+                  <CardDescription className="text-[var(--color-text-secondary)] text-base">
+                    {product.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {product.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-primary)]" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
               </Card>
             )
           })}
-        </div>
-
-        {/* Additional context */}
-        <div className="mt-16 max-w-4xl mx-auto">
-          <Card className="p-8 bg-linear-to-br from-purple-50 to-blue-50 border-purple-200">
-            <div className="text-center">
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                From Idea to Fulfillment
-              </h3>
-              <p className="text-gray-700 leading-relaxed">
-                ProductPilot doesn't just suggest products — it helps you validate demand with experiments, 
-                generates complete go-to-market assets (landing pages, copy, visuals), and connects you with 
-                fulfillment partners and tooling to actually launch.
-              </p>
-            </div>
-          </Card>
         </div>
       </div>
     </section>
   )
 }
+
