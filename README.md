@@ -29,7 +29,7 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxxx
 CLERK_SECRET_KEY=sk_test_xxxxxxxxxxxxx
 ```
 
-See `CLERK_SETUP.md` for detailed setup instructions.
+See `docs/CLERK_SETUP.md` for detailed setup instructions.
 
 Run the development server:
 
@@ -48,18 +48,40 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Project Structure
 
 ```
-├── middleware.ts                # Clerk auth middleware
-├── app/
-│   ├── sign-in/[[...sign-in]]/  # Clerk sign-in page
-│   ├── sign-up/[[...sign-up]]/  # Clerk sign-up page
-│   ├── dashboard/               # Protected dashboard
-│   └── page.tsx                 # Landing page
-├── components/
-│   ├── sections/                # Landing page sections
-│   ├── ui/                      # Reusable UI components (shadcn-style)
-│   └── navbar.tsx               # Navigation with Clerk auth
-└── lib/
-    └── utils.ts                 # Utility functions
+product-pilot/
+├── src/
+│   ├── app/                      # Next.js App Router
+│   │   ├── dashboard/            # Protected dashboard page
+│   │   ├── sign-in/              # Clerk sign-in page
+│   │   ├── sign-up/              # Clerk sign-up page
+│   │   ├── layout.tsx            # Root layout with ClerkProvider
+│   │   ├── page.tsx              # Landing page
+│   │   └── globals.css           # Global styles
+│   ├── components/
+│   │   ├── sections/             # Landing page sections
+│   │   │   ├── hero.tsx
+│   │   │   ├── how-it-works.tsx
+│   │   │   ├── product-types.tsx
+│   │   │   ├── validation-preview.tsx
+│   │   │   ├── testimonials.tsx
+│   │   │   └── cta-footer.tsx
+│   │   ├── ui/                   # Reusable UI components
+│   │   │   ├── button.tsx
+│   │   │   └── card.tsx
+│   │   └── navbar.tsx            # Navigation with auth
+│   ├── lib/
+│   │   └── utils.ts              # Utility functions (cn, etc)
+│   └── middleware.ts             # Clerk auth middleware
+├── public/                       # Static assets
+├── docs/                         # Documentation
+│   ├── CLERK_SETUP.md
+│   ├── CLERK_MIGRATION.md
+│   └── CLERK_READY.md
+├── .env.local                    # Environment variables
+├── package.json
+├── tsconfig.json
+├── next.config.ts
+└── tailwind.config.ts
 ```
 
 ## Authentication
@@ -82,7 +104,7 @@ This project uses **Clerk** for authentication with built-in support for:
 3. Add to `.env.local` (see above)
 4. Start developing!
 
-See `CLERK_SETUP.md` for detailed instructions.
+See `docs/CLERK_SETUP.md` for detailed instructions.
 
 ## Pages
 
