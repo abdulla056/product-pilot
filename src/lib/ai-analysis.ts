@@ -1,4 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
+import { prisma } from "@/lib/prisma"
+
 import {
   VideoTranscript,
   ContentAnalysis,

@@ -5,6 +5,7 @@ import { mockVideoTranscripts, mockCreatorGraph } from "@/lib/mock-data"
 import { getAndTranscribeChannelVideos } from "@/lib/transcription"
 import { getMyYouTubeChannel } from "@/lib/composio-helpers"
 import type { AnalysisRequest, AnalysisResponse } from "@/types/analysis"
+import { prisma } from "@/lib/prisma";
 
 /**
  * POST /api/analyze
@@ -86,6 +87,25 @@ export async function POST(request: NextRequest) {
       subscriberCount
     )
 
+    // Persist analysis result to MongoDB via Prisma
+    let savedAnalysisId: string | null = null
+    try {
+      const saved = await prisma.analysis.create({
+        data: {
+          userId,
+          channelId: actualChannelId,
+          channelName,
+          videoCount: transcripts.length,
+          depth,
+          resultJson: creatorGraph as any,
+        },
+      })
+      savedAnalysisId = saved.id
+    } catch (err) {
+      console.error("Failed to persist analysis:", err)
+      // proceed — still return analysis result even if persistence failed
+    }
+
     const processingTime = Date.now() - startTime
 
     const response: AnalysisResponse = {
@@ -94,7 +114,11 @@ export async function POST(request: NextRequest) {
       processingTime,
     }
 
-    return NextResponse.json(response)
+    // include analysisId when persisted
+    const payload: any = { ...response }
+    if (savedAnalysisId) payload.analysisId = savedAnalysisId
+
+    return NextResponse.json(payload)
   } catch (error) {
     console.error("Error in analysis endpoint:", error)
 
@@ -132,8 +156,22 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // TODO: Implement database lookup for existing analysis
-    // For now, return mock data
+    // Look up latest analysis for this user + channel
+    const existing = await prisma.analysis.findFirst({
+      where: { userId, channelId },
+      orderBy: { createdAt: "desc" },
+    })
+
+    if (existing) {
+      const response: AnalysisResponse = {
+        success: true,
+        data: existing.resultJson as any,
+      }
+      // include analysis id and timestamps if helpful
+      return NextResponse.json({ ...response, analysisId: existing.id, createdAt: existing.createdAt })
+    }
+
+    // Fallback to mock data if nothing persisted yet
     const response: AnalysisResponse = {
       success: true,
       data: mockCreatorGraph,
