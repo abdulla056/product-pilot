@@ -1,6 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
-import { getChannelStatistics, listChannelVideos } from "@/lib/composio"
+import { getChannelVideos } from "@/lib/composio-helpers"
+import { composio } from "@/lib/composio"
 
 export async function GET(request: Request) {
   try {
@@ -22,11 +23,20 @@ export async function GET(request: Request) {
 
     const entityId = user.id
 
-    // Get channel statistics and recent videos
-    const [stats, videos] = await Promise.all([
-      getChannelStatistics(entityId, channelId),
-      listChannelVideos(entityId, channelId, 10),
-    ])
+    // Get channel statistics using composio
+    const entity = await composio.getEntity(entityId)
+    const statsResult: any = await entity.execute({
+      actionName: "YOUTUBE_GET_CHANNEL_STATISTICS",
+      params: {
+        id: channelId,
+        part: "statistics,snippet,contentDetails",
+      },
+    })
+
+    const stats = statsResult?.data?.channels?.[0] || statsResult?.data?.items?.[0]
+
+    // Get recent videos
+    const videos = await getChannelVideos(entityId, channelId, 10)
 
     return NextResponse.json({
       success: true,
