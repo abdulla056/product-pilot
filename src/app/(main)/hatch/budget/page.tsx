@@ -57,6 +57,7 @@ export default function BudgetPage() {
         : model === "physical"
         ? "Print-on-demand. Made when ordered."
         : "Digital products or print-on-demand.",
+      helpText: "No upfront costs. Perfect for getting started with minimal risk.",
       compatibleWith: {
         model: ["digital", "both"],
         strategy: ["audience-first", "market-first", "balanced"],
@@ -68,6 +69,7 @@ export default function BudgetPage() {
       title: "$100 - $500",
       amount: "$100-$500",
       description: "Test the market with small batches or platform subscriptions.",
+      helpText: "Ideal for validating your product idea before scaling up.",
       compatibleWith: {
         model: ["digital", "physical", "both"],
         strategy: ["audience-first", "balanced"],
@@ -79,6 +81,7 @@ export default function BudgetPage() {
       title: "$500 - $2,000",
       amount: "$500-$2,000",
       description: "Professional-grade products or advanced digital platforms.",
+      helpText: "Invest in quality and features to stand out in the market.",
       compatibleWith: {
         model: ["physical", "both"],
         strategy: ["audience-first", "market-first", "balanced"],
@@ -90,6 +93,7 @@ export default function BudgetPage() {
       title: "$2,000+",
       amount: "$2,000+",
       description: "Large-scale production. Best for proven product-market fit.",
+      helpText: "Scale production when you've validated demand and are ready to grow.",
       compatibleWith: {
         model: ["physical", "both"],
         strategy: ["market-first", "balanced"],
