@@ -13,25 +13,25 @@ export function MarketTrendsCard({ trends }: MarketTrendsCardProps) {
       {/* Trending Products */}
         {trends.trendingProducts && trends.trendingProducts.length > 0 && (
           <div>
-            <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-purple-500" />
+            <h4 className="text-sm font-semibold text-[var(--color-text-primary)] mb-3 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-[var(--color-accent-primary)]" />
               Trending Products
             </h4>
             <div className="space-y-3">
               {trends.trendingProducts.slice(0, 4).map((product, index) => (
-                <div key={index} className="bg-linear-to-r from-purple-50 to-blue-50 rounded-lg p-3">
+                <div key={index} className="bg-[var(--color-bg-glass)] border border-[var(--color-border-subtle)] rounded-lg p-3">
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <h5 className="font-semibold text-gray-900 text-sm">{product.name}</h5>
-                      <p className="text-xs text-gray-600">{product.category}</p>
+                      <h5 className="font-semibold text-[var(--color-text-primary)] text-sm">{product.name}</h5>
+                      <p className="text-xs text-[var(--color-text-secondary)]">{product.category}</p>
                     </div>
-                    <Badge className="bg-green-100 text-green-700 border-green-200">
+                    <Badge className="bg-[var(--color-accent-glow)] text-[var(--color-accent-primary)] border border-[var(--color-accent-primary)]">
                       {product.growthRate}
                     </Badge>
                   </div>
-                  <p className="text-xs text-gray-600">{product.description}</p>
+                  <p className="text-xs text-[var(--color-text-secondary)]">{product.description}</p>
                   <div className="mt-2">
-                    <span className="text-xs font-medium text-purple-600">
+                    <span className="text-xs font-medium text-[var(--color-accent-primary)]">
                       Relevance: {Math.round((product.relevanceScore || 0) * 100)}%
                     </span>
                   </div>
@@ -44,10 +44,10 @@ export function MarketTrendsCard({ trends }: MarketTrendsCardProps) {
         {/* Emerging Niches */}
         {trends.emergingNiches && trends.emergingNiches.length > 0 && (
           <div>
-            <h4 className="text-sm font-semibold text-gray-700 mb-2">Emerging Niches</h4>
+            <h4 className="text-sm font-semibold text-[var(--color-text-primary)] mb-2">Emerging Niches</h4>
             <div className="flex flex-wrap gap-2">
               {trends.emergingNiches.map((niche, index) => (
-                <Badge key={index} variant="secondary" className="bg-blue-100 text-blue-700">
+                <Badge key={index} variant="secondary" className="bg-[var(--color-bg-glass)] text-[var(--color-accent-primary)] border border-[var(--color-border-subtle)]">
                   {niche}
                 </Badge>
               ))}
@@ -58,17 +58,17 @@ export function MarketTrendsCard({ trends }: MarketTrendsCardProps) {
         {/* Seasonal Opportunities */}
         {trends.seasonalOpportunities && trends.seasonalOpportunities.length > 0 && (
           <div>
-            <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-orange-500" />
+            <h4 className="text-sm font-semibold text-[var(--color-text-primary)] mb-3 flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-[var(--color-accent-primary)]" />
               Seasonal Opportunities
             </h4>
             <div className="space-y-2">
               {trends.seasonalOpportunities.map((season, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-3">
-                  <h5 className="text-sm font-semibold text-gray-900 mb-2">{season.season}</h5>
+                <div key={index} className="border border-[var(--color-border-subtle)] bg-[var(--color-bg-glass)] rounded-lg p-3">
+                  <h5 className="text-sm font-semibold text-[var(--color-text-primary)] mb-2">{season.season}</h5>
                   <div className="flex flex-wrap gap-1">
                     {season.products && season.products.map((product, pIndex) => (
-                      <Badge key={pIndex} variant="outline" className="text-xs">
+                      <Badge key={pIndex} variant="outline" className="text-xs border-[var(--color-border-subtle)] text-[var(--color-text-secondary)]">
                         {product}
                       </Badge>
                     ))}
@@ -82,18 +82,18 @@ export function MarketTrendsCard({ trends }: MarketTrendsCardProps) {
         {/* Competitor Insights */}
         {trends.competitorInsights && trends.competitorInsights.length > 0 && (
           <div>
-            <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-              <Users className="h-4 w-4 text-indigo-500" />
+            <h4 className="text-sm font-semibold text-[var(--color-text-primary)] mb-3 flex items-center gap-2">
+              <Users className="h-4 w-4 text-[var(--color-accent-primary)]" />
               Successful Creators
             </h4>
             <div className="space-y-2">
               {trends.competitorInsights.slice(0, 3).map((competitor, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-3">
-                  <h5 className="text-sm font-semibold text-gray-900 mb-1">{competitor.creator}</h5>
-                  <p className="text-xs text-gray-600 mb-2">{competitor.successMetrics}</p>
+                <div key={index} className="border border-[var(--color-border-subtle)] bg-[var(--color-bg-glass)] rounded-lg p-3">
+                  <h5 className="text-sm font-semibold text-[var(--color-text-primary)] mb-1">{competitor.creator}</h5>
+                  <p className="text-xs text-[var(--color-text-secondary)] mb-2">{competitor.successMetrics}</p>
                   <div className="flex flex-wrap gap-1">
                     {competitor.products && competitor.products.map((product, pIndex) => (
-                      <Badge key={pIndex} variant="outline" className="text-xs">
+                      <Badge key={pIndex} variant="outline" className="text-xs border-[var(--color-border-subtle)] text-[var(--color-text-secondary)]">
                         {product}
                       </Badge>
                     ))}

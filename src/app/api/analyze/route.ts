@@ -20,8 +20,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = (await request.json()) as AnalysisRequest;
-    const { channelId, videoCount = 10, depth = "standard", useMockData = false } = body;
+    const body = (await request.json()) as AnalysisRequest
+    const { channelId, videoCount = 10, depth = "standard", useMockData = false, preferences } = body
 
     const startTime = Date.now();
 
@@ -82,29 +82,11 @@ export async function POST(request: NextRequest) {
       channelName,
       transcripts,
       totalViews,
-      subscriberCount
-    );
+      subscriberCount,
+      preferences
+    )
 
-    // Persist analysis result to MongoDB via Prisma
-    let savedAnalysisId: string | null = null;
-    try {
-      const saved = await prisma.analysis.create({
-        data: {
-          userId,
-          channelId: actualChannelId,
-          channelName,
-          videoCount: transcripts.length,
-          depth,
-          resultJson: creatorGraph as any,
-        },
-      });
-      savedAnalysisId = saved.id;
-    } catch (err) {
-      console.error("Failed to persist analysis:", err);
-      // proceed — still return analysis result even if persistence failed
-    }
-
-    const processingTime = Date.now() - startTime;
+    const processingTime = Date.now() - startTime
 
     const response: AnalysisResponse = {
       success: true,
