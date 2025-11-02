@@ -57,7 +57,7 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
         body: JSON.stringify({
           channelId,
           videoCount: 10,
-          useMockData: false,
+          useMockData: true,
           preferences: preferences ? {
             strategy: preferences.strategy,
             productModel: preferences.productModel,
