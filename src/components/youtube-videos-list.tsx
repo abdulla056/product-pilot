@@ -50,7 +50,7 @@ export function YouTubeVideosList() {
         setLoading(true)
         setError(null)
         
-        console.log('[YouTubeVideosList] Fetching videos...')
+        console.log
         const response = await fetch('/api/youtube/videos?maxResults=12')
         const data: VideosResponse = await response.json()
         
@@ -80,7 +80,7 @@ export function YouTubeVideosList() {
 
   if (loading) {
     return (
-      <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)]">
+      <Card className="bg-[var(--color-bg-card)] border-2 border-[var(--color-border-subtle)]">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-[var(--color-text-primary)]">
             <Youtube className="h-5 w-5 text-[var(--color-accent-primary)]" />
@@ -99,13 +99,13 @@ export function YouTubeVideosList() {
 
   if (error) {
     return (
-      <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)]">
+      <Card className="border-2 border-[var(--color-accent-primary)] bg-[var(--color-bg-card)]">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-[var(--color-text-primary)]">
             <AlertCircle className="h-5 w-5 text-[var(--color-accent-primary)]" />
             Error Loading Videos
           </CardTitle>
-          <CardDescription className="text-[var(--color-text-secondary)]">{error}</CardDescription>
+          <CardDescription className="text-[var(--color-accent-primary)]">{error}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {errorDetails && (
@@ -132,7 +132,7 @@ export function YouTubeVideosList() {
 
   if (videos.length === 0) {
     return (
-      <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)]">
+      <Card className="border-2 border-[var(--color-border-subtle)] bg-[var(--color-bg-card)]">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-[var(--color-text-primary)]">
             <Youtube className="h-5 w-5 text-[var(--color-accent-primary)]" />
@@ -152,39 +152,21 @@ export function YouTubeVideosList() {
   }
 
   return (
-    <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)]">
+    <Card className="bg-[var(--color-bg-card)] border-2 border-[var(--color-border-subtle)] shadow-lg">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2 text-[var(--color-text-primary)]">
-              <Youtube className="h-5 w-5 text-[var(--color-accent-primary)]" />
-              Your YouTube Videos
-            </CardTitle>
-            <CardDescription className="text-[var(--color-text-secondary)]">
-              {channelInfo?.title && `${channelInfo.title} • `}
-              {videos.length} of {channelInfo?.videoCount || videos.length} videos
-            </CardDescription>
-          </div>
-          {channelInfo && (
-            <div className="flex gap-4 text-sm text-[var(--color-text-secondary)]">
-              <div>
-                <span className="font-semibold text-[var(--color-text-primary)]">{parseInt(channelInfo.subscriberCount).toLocaleString()}</span>
-                <span className="ml-1">subscribers</span>
-              </div>
-              <div>
-                <span className="font-semibold text-[var(--color-text-primary)]">{parseInt(channelInfo.viewCount).toLocaleString()}</span>
-                <span className="ml-1">views</span>
-              </div>
-            </div>
-          )}
-        </div>
+        <CardTitle className="text-2xl font-bold text-[var(--color-text-primary)]">
+          Your YouTube Videos
+        </CardTitle>
+        <CardDescription className="text-[var(--color-text-secondary)]">
+          Recent uploads from your channel
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {videos.map((video) => (
             <div
               key={video.id}
-              className="group border-2 border-[var(--color-border-subtle)] rounded-lg overflow-hidden hover:border-[var(--color-accent-primary)]/50 transition-all bg-black/60 backdrop-blur-sm"
+              className="group border-2 border-[var(--color-border-subtle)] rounded-lg overflow-hidden hover:shadow-lg hover:border-[var(--color-accent-primary)] transition-all bg-[var(--color-bg-card)]"
             >
               <div className="relative aspect-video bg-[var(--color-bg-base)]">
                 <img

@@ -10,6 +10,7 @@ import { AudienceAnalysisCard } from "@/components/audience-analysis-card"
 import { ProductOpportunitiesCard } from "@/components/product-opportunities-card"
 import { MarketTrendsCard } from "@/components/market-trends-card"
 import { AIAnalysisProgress } from "@/components/ai-analysis-progress"
+import { getOnboardingPreferences } from "@/lib/onboarding-storage"
 import type { CreatorGraph } from "@/types/analysis"
 import { Sparkles, Loader2, CheckCircle, AlertCircle, Brain, Users, TrendingUp, Package, ChevronDown, ChevronUp } from "lucide-react"
 
@@ -45,6 +46,9 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
     setError(null)
 
     try {
+      // Get user preferences
+      const preferences = getOnboardingPreferences()
+      
       const response = await fetch("/api/analyze", {
         method: "POST",
         headers: {
@@ -53,8 +57,12 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
         body: JSON.stringify({
           channelId,
           videoCount: 10,
-          depth: "standard",
-          useMockData: true,  // Use real YouTube data and transcription
+          useMockData: false,
+          preferences: preferences ? {
+            strategy: preferences.strategy,
+            productModel: preferences.productModel,
+            budget: preferences.budget,
+          } : undefined,
         }),
       })
 
@@ -79,10 +87,10 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
       <>
         <AIAnalysisProgress open={showProgress} onOpenChange={setShowProgress} />
         
-        <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)]">
+        <Card className="bg-[var(--color-bg-card)] border-2 border-[var(--color-border-subtle)]">
           <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="p-4 bg-[var(--color-accent-primary)]/20 rounded-full border-2 border-[var(--color-accent-primary)]/30">
+            <div className="p-4 bg-[var(--color-bg-glass)] rounded-full">
               <Sparkles className="h-8 w-8 text-[var(--color-accent-primary)]" />
             </div>
           </div>
@@ -92,35 +100,35 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="bg-[var(--color-bg-glass)] rounded-lg p-4 border border-[var(--color-border-subtle)]">
+          <div className="bg-[var(--color-bg-glass)] border border-[var(--color-border-subtle)] rounded-lg p-4">
             <h4 className="font-semibold text-[var(--color-text-primary)] mb-2">What You'll Get:</h4>
             <ul className="space-y-2 text-sm text-[var(--color-text-secondary)]">
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-[var(--color-accent-primary)] mt-0.5 flex-shrink-0" />
-                <span><strong className="text-[var(--color-text-primary)]">Content Analysis:</strong> AI identifies your content genre, style, and expertise areas</span>
+                <CheckCircle className="h-4 w-4 text-[var(--color-accent-primary)] mt-0.5" />
+                <span><strong>Content Analysis:</strong> AI identifies your content genre, style, and expertise areas</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-[var(--color-accent-primary)] mt-0.5 flex-shrink-0" />
-                <span><strong className="text-[var(--color-text-primary)]">Audience Insights:</strong> Deep dive into demographics, pain points, and aspirations</span>
+                <CheckCircle className="h-4 w-4 text-[var(--color-accent-secondary)] mt-0.5" />
+                <span><strong>Audience Insights:</strong> Deep dive into demographics, pain points, and aspirations</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-[var(--color-accent-primary)] mt-0.5 flex-shrink-0" />
-                <span><strong className="text-[var(--color-text-primary)]">Product Opportunities:</strong> 6-8 viable product ideas (digital, physical, service)</span>
+                <CheckCircle className="h-4 w-4 text-[var(--color-accent-tertiary)] mt-0.5" />
+                <span><strong>Product Opportunities:</strong> 6-8 viable product ideas (digital, physical, service)</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-[var(--color-accent-primary)] mt-0.5 flex-shrink-0" />
-                <span><strong className="text-[var(--color-text-primary)]">Market Trends:</strong> Current trends and competitor insights in your niche</span>
+                <CheckCircle className="h-4 w-4 text-[var(--color-accent-warning)] mt-0.5" />
+                <span><strong>Market Trends:</strong> Current trends and competitor insights in your niche</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-[var(--color-accent-primary)] mt-0.5 flex-shrink-0" />
-                <span><strong className="text-[var(--color-text-primary)]">Validation Strategy:</strong> Step-by-step suggestions to test demand</span>
+                <CheckCircle className="h-4 w-4 text-[var(--color-accent-primary)] mt-0.5" />
+                <span><strong>Validation Strategy:</strong> Step-by-step suggestions to test demand</span>
               </li>
             </ul>
           </div>
 
           <div className="bg-[var(--color-bg-glass)] border border-[var(--color-border-subtle)] rounded-lg p-4">
             <div className="flex items-start gap-2">
-              <AlertCircle className="h-5 w-5 text-[var(--color-accent-primary)] mt-0.5 flex-shrink-0" />
+              <AlertCircle className="h-5 w-5 text-[var(--color-accent-primary)] mt-0.5" />
               <div>
                 <h5 className="font-semibold text-[var(--color-text-primary)] text-sm mb-1">Analysis Time & Requirements</h5>
                 <p className="text-xs text-[var(--color-text-secondary)] mb-2">
@@ -132,7 +140,7 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
                   <li>Analyze content with AI (Gemini 2.0)</li>
                   <li>Takes 1-2 minutes depending on video length</li>
                 </ul>
-                <p className="text-xs text-[var(--color-accent-primary)] mt-2 font-semibold">
+                <p className="text-xs text-[var(--color-text-secondary)] mt-2 font-semibold">
                   ⚠️ Your videos must have captions/subtitles enabled (auto-generated or manual)
                 </p>
               </div>
@@ -140,7 +148,7 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
           </div>
 
           {error && (
-            <div className="bg-[var(--color-bg-glass)] border border-[var(--color-border-subtle)] rounded-lg p-4">
+            <div className="bg-[var(--color-bg-glass)] border border-[var(--color-accent-primary)] rounded-lg p-4">
               <p className="text-sm text-[var(--color-accent-primary)]">{error}</p>
             </div>
           )}
@@ -148,7 +156,7 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
           <Button
             onClick={runAnalysis}
             disabled={loading}
-            className="w-full"
+            className="w-full bg-[var(--color-accent-primary)] hover:bg-[var(--color-accent-primary)]/80 text-[var(--color-text-dark)]"
             size="lg"
           >
             {loading ? (
@@ -164,9 +172,6 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
             )}
           </Button>
 
-          <p className="text-xs text-center text-[var(--color-text-secondary)]">
-            ✨ Using real YouTube transcription + AI analysis
-          </p>
         </CardContent>
       </Card>
       </>
@@ -179,10 +184,10 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
       
       <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <h2 className="text-3xl font-bold text-[var(--color-text-primary)] mb-1">Analysis Results</h2>
-          <p className="text-[var(--color-text-secondary)] text-sm">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-bold text-[var(--color-text-primary)]">Analysis Results</h2>
+          <p className="text-[var(--color-text-secondary)] mt-1">
             For {channelName} • {analysis.totalVideos} videos analyzed • {new Date(analysis.analysisDate).toLocaleDateString()}
           </p>
         </div>
@@ -194,27 +199,27 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
 
       {/* Stats Overview */}
       <div className="grid md:grid-cols-3 gap-4">
-        <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)]">
+        <Card className="bg-[var(--color-bg-card)] border-2 border-[var(--color-border-subtle)]">
           <CardContent className="pt-6">
             <div className="text-center">
               <p className="text-sm text-[var(--color-text-secondary)] mb-1">Total Views</p>
-              <p className="text-3xl font-bold text-[var(--color-accent-primary)]">{analysis.totalViews.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-[var(--color-primary)]">{analysis.totalViews.toLocaleString()}</p>
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)]">
+        <Card className="bg-[var(--color-bg-card)] border-2 border-[var(--color-border-subtle)]">
           <CardContent className="pt-6">
             <div className="text-center">
               <p className="text-sm text-[var(--color-text-secondary)] mb-1">Subscribers</p>
-              <p className="text-3xl font-bold text-[var(--color-accent-primary)]">{analysis.subscriberCount.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-[var(--color-primary)]">{analysis.subscriberCount.toLocaleString()}</p>
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)]">
+        <Card className="bg-[var(--color-bg-card)] border-2 border-[var(--color-border-subtle)]">
           <CardContent className="pt-6">
             <div className="text-center">
               <p className="text-sm text-[var(--color-text-secondary)] mb-1">Product Ideas</p>
-              <p className="text-3xl font-bold text-[var(--color-accent-primary)]">{analysis.productOpportunities.length}</p>
+              <p className="text-3xl font-bold text-[var(--color-primary)]">{analysis.productOpportunities.length}</p>
             </div>
           </CardContent>
         </Card>
@@ -226,16 +231,16 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
       {/* Analysis Cards - Full Width & Collapsible */}
       <div className="space-y-4">
         {/* Content Analysis */}
-        <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] hover:border-[var(--color-accent-primary)]/50 transition-shadow">
+        <Card className="bg-[var(--color-bg-card)] border-2 border-[var(--color-border-subtle)] hover:shadow-lg transition-shadow">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-[var(--color-accent-primary)]/20 rounded-lg border border-[var(--color-accent-primary)]/30 flex-shrink-0">
-                  <Brain className="h-5 w-5 text-[var(--color-accent-primary)]" />
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-[var(--color-bg-glass)] rounded-lg">
+                  <Brain className="h-5 w-5 text-[var(--color-accent-secondary)]" />
                 </div>
-                <div className="flex flex-col justify-center">
-                  <CardTitle className="text-lg text-[var(--color-text-primary)] mb-0">Content Analysis</CardTitle>
-                  <CardDescription className="text-[var(--color-text-secondary)] text-sm mt-0">AI-powered analysis of your content patterns</CardDescription>
+                <div>
+                  <CardTitle className="text-lg text-[var(--color-text-primary)]">Content Analysis</CardTitle>
+                  <CardDescription className="text-[var(--color-text-secondary)]">AI-powered analysis of your content patterns</CardDescription>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -265,16 +270,16 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
         </Card>
 
         {/* Audience Insights */}
-        <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] hover:border-[var(--color-accent-primary)]/50 transition-shadow">
+        <Card className="bg-[var(--color-bg-card)] border-2 border-[var(--color-border-subtle)] hover:shadow-lg transition-shadow">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-[var(--color-accent-primary)]/20 rounded-lg border border-[var(--color-accent-primary)]/30 flex-shrink-0">
-                  <Users className="h-5 w-5 text-[var(--color-accent-primary)]" />
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-[var(--color-bg-glass)] rounded-lg">
+                  <Users className="h-5 w-5 text-[var(--color-accent-tertiary)]" />
                 </div>
-                <div className="flex flex-col justify-center">
-                  <CardTitle className="text-lg text-[var(--color-text-primary)] mb-0">Audience Insights</CardTitle>
-                  <CardDescription className="text-[var(--color-text-secondary)] text-sm mt-0">Deep analysis of your audience demographics</CardDescription>
+                <div>
+                  <CardTitle className="text-lg text-[var(--color-text-primary)]">Audience Insights</CardTitle>
+                  <CardDescription className="text-[var(--color-text-secondary)]">Deep analysis of your audience demographics</CardDescription>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -304,20 +309,20 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
         </Card>
 
         {/* Market Trends */}
-        <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] hover:border-[var(--color-accent-primary)]/50 transition-shadow">
+        <Card className="bg-[var(--color-bg-card)] border-2 border-[var(--color-border-subtle)] hover:shadow-lg transition-shadow">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-[var(--color-accent-primary)]/20 rounded-lg border border-[var(--color-accent-primary)]/30 flex-shrink-0">
-                  <TrendingUp className="h-5 w-5 text-[var(--color-accent-primary)]" />
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-[var(--color-bg-glass)] rounded-lg">
+                  <TrendingUp className="h-5 w-5 text-[var(--color-accent-warning)]" />
                 </div>
-                <div className="flex flex-col justify-center">
-                  <CardTitle className="text-lg text-[var(--color-text-primary)] mb-0">Market Trends</CardTitle>
-                  <CardDescription className="text-[var(--color-text-secondary)] text-sm mt-0">Current trends relevant to your niche</CardDescription>
+                <div>
+                  <CardTitle className="text-lg text-[var(--color-text-primary)]">Market Trends</CardTitle>
+                  <CardDescription className="text-[var(--color-text-secondary)]">Current trends relevant to your niche</CardDescription>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Badge variant="secondary" className="bg-[var(--color-accent-primary)]/20 text-[var(--color-accent-primary)] border border-[var(--color-accent-primary)]/30">
+                <Badge variant="secondary" className="bg-[var(--color-bg-glass)] text-[var(--color-accent-primary)] border border-[var(--color-border-subtle)]">
                   {analysis.marketTrends.trendingProducts?.length || 0} trends
                 </Badge>
                 <Button
@@ -344,12 +349,12 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
       </div>
 
       {/* Recommendations Summary */}
-      <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-accent-primary)]/50">
+      <Card className="bg-[var(--color-bg-card)] border-2 border-[var(--color-accent-primary)]">
         <CardHeader>
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <CardTitle className="text-xl text-[var(--color-text-primary)] mb-1">🎯 Recommended Next Steps</CardTitle>
-              <CardDescription className="text-[var(--color-text-secondary)] text-sm">Based on AI analysis, here's what to focus on</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-xl text-[var(--color-text-primary)]">🎯 Recommended Next Steps</CardTitle>
+              <CardDescription className="text-[var(--color-text-secondary)]">Based on AI analysis, here's what to focus on</CardDescription>
             </div>
             <Button
               variant="ghost"

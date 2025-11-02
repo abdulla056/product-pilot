@@ -359,7 +359,33 @@ export const mockCreatorGraph: CreatorGraph = {
         "Create a free 7-day challenge as lead magnet",
         "Run Instagram poll about program interest and pricing",
         "Launch with money-back guarantee to reduce risk"
-      ]
+      ],
+      profitability: {
+        score: 92,
+        analysis: "Extremely high profit margins (85-95%) as a digital product with minimal ongoing costs. One-time creation cost of $2-5K for content production, then pure profit. At $147 average price, selling just 100 copies generates $14,700 revenue. Potential for recurring revenue through program updates and upsells.",
+        estimatedMargin: "85-95%"
+      },
+      viability: {
+        score: 88,
+        analysis: "Highly feasible with creator's existing expertise and content. Requires 6-8 weeks to create comprehensive materials, record videos, and set up delivery platform. Main resources needed: video equipment (already owned), course platform ($50-200/month), and time investment. Low technical barriers.",
+        timeToMarket: "6-8 weeks"
+      },
+      sustainability: {
+        score: 90,
+        analysis: "Evergreen product with long-term demand. Fitness transformation is a perennial need, not a trend. Can be updated yearly to stay current. Scalable to unlimited customers with no inventory concerns. Strong potential for creating a product ecosystem (beginner/intermediate/advanced versions).",
+        longTermPotential: "Evergreen with high scalability potential"
+      },
+      opportunity: {
+        score: 94,
+        analysis: "Large market gap for affordable, comprehensive home workout programs. Competitors charge $200-500 or require gym equipment. Creator's unique angle: proven personal transformation + focus on busy professionals + home workouts. Market timing is perfect with continued home fitness trend.",
+        marketGap: "Affordable home-based transformation program for busy professionals"
+      },
+      impact: {
+        score: 95,
+        analysis: "Solves major audience pain points: lack of time, confusion about where to start, need for accountability. Transformation potential is life-changing - weight loss, confidence building, habit formation. High perceived value as it addresses physical, mental, and lifestyle improvements.",
+        audienceValue: "Life-changing transformation addressing fitness, confidence, and lifestyle"
+      },
+      overallRating: 92
     },
     {
       id: "prod_002",
@@ -381,7 +407,33 @@ export const mockCreatorGraph: CreatorGraph = {
         "Survey audience on biggest meal prep challenges",
         "Pre-sell with special bonus (meal prep containers)",
         "Partner with meal prep container brands for affiliate"
-      ]
+      ],
+      profitability: {
+        score: 90,
+        analysis: "High-margin digital product (90%+). Low creation cost ($1-2K for recipe testing and videos). At $67 average, 100 sales = $6,700 revenue with minimal ongoing costs.",
+        estimatedMargin: "90-95%"
+      },
+      viability: {
+        score: 92,
+        analysis: "Very achievable with existing recipes and meal prep experience. Requires 4-6 weeks for recipe documentation, photography, and platform setup. Minimal technical barriers.",
+        timeToMarket: "4-6 weeks"
+      },
+      sustainability: {
+        score: 88,
+        analysis: "Evergreen need for healthy eating solutions. Can be updated seasonally with new recipes. Scalable delivery. Potential for recipe add-on packs and seasonal updates as upsells.",
+        longTermPotential: "Evergreen with seasonal update opportunities"
+      },
+      opportunity: {
+        score: 91,
+        analysis: "Large market for meal prep solutions. Unique angle combining simplicity with macro tracking. Competitors either too complex or lacking nutritional depth. Growing meal prep trend.",
+        marketGap: "Simple yet comprehensive meal prep system with macro guidance"
+      },
+      impact: {
+        score: 89,
+        analysis: "Solves time scarcity and decision fatigue around healthy eating. Enables consistency in nutrition goals. High perceived value as it transforms daily routines and health outcomes.",
+        audienceValue: "Time-saving solution enabling consistent healthy eating habits"
+      },
+      overallRating: 90
     },
     {
       id: "prod_003",

@@ -1,20 +1,30 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Users, TrendingUp, Scale, ArrowRight } from "lucide-react"
+import { getOnboardingState } from "@/lib/onboarding-storage"
+import type { StrategyPreference } from "@/types/onboarding"
 
-type GoalOption = "audience-first" | "market-first" | "balanced" | null
-
-export default function HatchStrategyPage() {
-  const [selectedOption, setSelectedOption] = useState<GoalOption>(null)
+export default function OnboardingPage() {
+  const [selectedOption, setSelectedOption] = useState<StrategyPreference | null>(null)
   const router = useRouter()
+
+  useEffect(() => {
+    // Load saved preference if exists
+    const state = getOnboardingState()
+    if (state.preferences?.strategy) {
+      setSelectedOption(state.preferences.strategy)
+    }
+  }, [])
 
   const handleContinue = () => {
     if (selectedOption) {
-      // Store strategy selection in localStorage
-      localStorage.setItem("hatch_strategy", selectedOption)
-      router.push("/hatch/model")
+      // Save to session storage for use in next step
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("onboarding_strategy", selectedOption)
+      }
+      router.push("/onboarding/model")
     }
   }
 
