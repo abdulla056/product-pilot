@@ -296,7 +296,7 @@ ${preferencesContext}
 
 ${attempt > 1 ? "⚠️ SECOND ATTEMPT: Previous products were too generic. Be more specific and creative." : ""}
 
-Generate 6-8 diverse product opportunities across digital products, physical products, and services.
+Generate exactly 4 high-quality product opportunities across digital products, physical products, and services. Quality over quantity - focus on the most viable and promising options.
 ${preferences ? "Adjust recommendations to match user preferences while maintaining diversity." : ""}
 
 For each product, provide comprehensive business analysis including:
