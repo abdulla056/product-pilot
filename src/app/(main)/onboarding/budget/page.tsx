@@ -1,17 +1,51 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { CircleDollarSign, Wallet, Landmark } from "lucide-react"
-
-type BudgetOption = "zero" | "small" | "all" | null
+import { saveOnboardingPreferences, getOnboardingState } from "@/lib/onboarding-storage"
+import type { BudgetPreference, StrategyPreference, ProductModelPreference } from "@/types/onboarding"
 
 export default function BudgetPage() {
-  const [selectedBudget, setSelectedBudget] = useState<BudgetOption>(null)
+  const [selectedBudget, setSelectedBudget] = useState<BudgetPreference | null>(null)
   const router = useRouter()
+
+  useEffect(() => {
+    // Load saved preference if exists
+    const state = getOnboardingState()
+    if (state.preferences?.budget) {
+      setSelectedBudget(state.preferences.budget)
+    }
+  }, [])
 
   const handleContinue = () => {
     if (selectedBudget) {
+      // Get preferences from session storage
+      const strategy = (typeof window !== "undefined" 
+        ? sessionStorage.getItem("onboarding_strategy") 
+        : null) as StrategyPreference | null
+      
+      const productModel = (typeof window !== "undefined" 
+        ? sessionStorage.getItem("onboarding_model") 
+        : null) as ProductModelPreference | null
+
+      // Save all preferences to localStorage
+      if (strategy && productModel) {
+        saveOnboardingPreferences({
+          strategy,
+          productModel,
+          budget: selectedBudget,
+          completedAt: new Date().toISOString(),
+        })
+        
+        // Clear session storage
+        if (typeof window !== "undefined") {
+          sessionStorage.removeItem("onboarding_strategy")
+          sessionStorage.removeItem("onboarding_model")
+        }
+      }
+
+      // Redirect to dashboard
       router.push("/dashboard")
     }
   }

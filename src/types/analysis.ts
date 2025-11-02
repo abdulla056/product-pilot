@@ -137,6 +137,11 @@ export interface AnalysisRequest {
   videoCount?: number
   depth?: "quick" | "standard" | "deep"
   useMockData?: boolean
+  preferences?: {
+    strategy?: "audience-first" | "market-first" | "balanced"
+    productModel?: "digital" | "physical" | "both"
+    budget?: "zero" | "small" | "all"
+  }
 }
 
 export interface AnalysisResponse {

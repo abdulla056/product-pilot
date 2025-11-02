@@ -5,6 +5,7 @@ import { ConnectYouTubeButton } from "@/components/connect-youtube-button"
 import { AnalysisDashboard } from "@/components/analysis-dashboard"
 import { YouTubeVideosList } from "@/components/youtube-videos-list"
 import { getYouTubeConnection, getMyYouTubeChannel} from "@/lib/composio-helpers"
+import { OnboardingCheck } from "@/components/onboarding-check"
 
 export default async function DashboardPage() {
   const user = await currentUser()
@@ -21,7 +22,9 @@ export default async function DashboardPage() {
   const channelId = (youtubeChannel as any)?.channelId
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg-base)]">
+    <>
+      <OnboardingCheck />
+      <div className="min-h-screen bg-[var(--color-bg-base)]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Welcome Section with YouTube Connection */}
         <div className="mb-8">
@@ -67,6 +70,7 @@ export default async function DashboardPage() {
         )}
       </div>
     </div>
+    </>
   )
 }
 
