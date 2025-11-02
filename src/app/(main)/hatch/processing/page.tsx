@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { Loader2, CheckCircle2, AlertCircle, Youtube, CheckCircle } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 
-type ProcessingStatus = "connecting" | "scraping" | "transcribing" | "generating_products" | "complete" | "error" | "needs_connection"
+type ProcessingStatus = "connecting" | "scraping" | "transcribing" | "generating_products" | "finding_vendors" | "complete" | "error" | "needs_connection"
 
 export default function ProcessingPage() {
   const router = useRouter()
@@ -14,6 +14,16 @@ export default function ProcessingPage() {
   const [data, setData] = useState<any>(null)
   const [transcribedVideos, setTranscribedVideos] = useState<string[]>([])
   const [totalVideos, setTotalVideos] = useState(10)
+
+  // Helper functions to check status progression
+  const isStepComplete = (step: string) => {
+    const steps = ["connecting", "scraping", "transcribing", "generating_products", "finding_vendors", "complete"]
+    const currentIndex = steps.indexOf(status)
+    const stepIndex = steps.indexOf(step)
+    return currentIndex > stepIndex || status === "complete"
+  }
+
+  const isStepActive = (step: string) => status === step
 
   // Get onboarding data from localStorage
   useEffect(() => {
@@ -180,17 +190,15 @@ export default function ProcessingPage() {
                 <div className="flex flex-col gap-4">
                   {/* Step 1: Checking Connection */}
                   <div className="flex items-center gap-3">
-                    {status === "connecting" ? (
+                    {isStepActive("connecting") ? (
                       <Loader2 className="w-5 h-5 text-[var(--color-accent-primary)] animate-spin flex-shrink-0" />
                     ) : (
                       <CheckCircle className="w-5 h-5 text-[var(--color-accent-primary)] flex-shrink-0" />
                     )}
                     <span className={`text-sm ${
-                      status === "connecting" 
+                      isStepActive("connecting")
                         ? "text-[var(--color-accent-primary)] font-medium" 
-                        : status === "complete" || (status !== "connecting" && status !== "error")
-                        ? "text-[var(--color-text-secondary)]"
-                        : "text-[var(--color-text-secondary)]/50"
+                        : "text-[var(--color-text-secondary)]"
                     }`}>
                       Checking YouTube connection
                     </span>
@@ -198,17 +206,17 @@ export default function ProcessingPage() {
 
                   {/* Step 2: Fetching Videos */}
                   <div className="flex items-center gap-3">
-                    {status === "scraping" ? (
+                    {isStepActive("scraping") ? (
                       <Loader2 className="w-5 h-5 text-[var(--color-accent-primary)] animate-spin flex-shrink-0" />
-                    ) : status === "transcribing" || status === "complete" ? (
+                    ) : isStepComplete("scraping") ? (
                       <CheckCircle className="w-5 h-5 text-[var(--color-accent-primary)] flex-shrink-0" />
                     ) : (
                       <div className="w-5 h-5 rounded-full border-2 border-[var(--color-border-subtle)]/30 flex-shrink-0" />
                     )}
                     <span className={`text-sm ${
-                      status === "scraping" 
+                      isStepActive("scraping")
                         ? "text-[var(--color-accent-primary)] font-medium" 
-                        : status === "transcribing" || status === "complete"
+                        : isStepComplete("scraping")
                         ? "text-[var(--color-text-secondary)]"
                         : "text-[var(--color-text-secondary)]/50"
                     }`}>
@@ -219,18 +227,18 @@ export default function ProcessingPage() {
                   {/* Step 3: Transcribing Videos */}
                   <div className="flex flex-col gap-3">
                     <div className="flex items-center gap-3">
-                      {status === "transcribing" ? (
+                      {isStepActive("transcribing") ? (
                         <Loader2 className="w-5 h-5 text-[#10b981] animate-spin flex-shrink-0" />
-                      ) : status === "complete" || status === "finding_vendors" ? (
+                      ) : isStepComplete("transcribing") ? (
                         <CheckCircle className="w-5 h-5 text-[#10b981] flex-shrink-0" />
                       ) : (
                         <div className="w-5 h-5 rounded-full border-2 border-[var(--color-border-subtle)]/30 flex-shrink-0" />
                       )}
                       <div className="flex-1">
                         <span className={`text-sm block ${
-                          status === "transcribing" 
+                          isStepActive("transcribing")
                             ? "text-[#10b981] font-medium" 
-                            : status === "complete" || status === "finding_vendors"
+                            : isStepComplete("transcribing")
                             ? "text-[var(--color-text-secondary)]"
                             : "text-[var(--color-text-secondary)]/50"
                         }`}>
@@ -263,15 +271,15 @@ export default function ProcessingPage() {
                   </div>
 
                   {/* Step 4: Generating Products */}
-                  {(status === "generating_products" || status === "complete") && (
+                  {(isStepActive("generating_products") || isStepComplete("generating_products")) && (
                     <div className="flex items-center gap-3">
-                      {status === "generating_products" ? (
+                      {isStepActive("generating_products") ? (
                         <Loader2 className="w-5 h-5 text-[#10b981] animate-spin flex-shrink-0" />
                       ) : (
                         <CheckCircle className="w-5 h-5 text-[#10b981] flex-shrink-0" />
                       )}
                       <span className={`text-sm ${
-                        status === "generating_products" 
+                        isStepActive("generating_products")
                           ? "text-[#10b981] font-medium" 
                           : "text-[var(--color-text-secondary)]"
                       }`}>

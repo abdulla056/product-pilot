@@ -270,7 +270,7 @@ export default function VendorsPage() {
               <p className="text-[var(--color-text-secondary)] mb-4">
                 No vendors found. Please complete the hatch process again.
               </p>
-              <Button onClick={() => router.push("/hatch/strategy")} variant="outline">
+              <Button onClick={() => router.push("/hatch/strategy")} variant="default">
                 Start Hatch Process
               </Button>
             </CardContent>

@@ -40,8 +40,6 @@ export async function POST(request: NextRequest) {
       {
         success: false,
         error: error.message || "Failed to enrich vendor locations",
-        // Return original vendors if enrichment fails
-        vendors: body.vendors || [],
       },
       { status: 500 }
     )

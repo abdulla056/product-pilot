@@ -135,7 +135,7 @@ Make sure each product is:
       
       // Ensure it's an array
       if (!Array.isArray(products)) {
-        products = products.products || [products]
+        products = products || [products]
       }
       
       // Limit to exactly 3 products
