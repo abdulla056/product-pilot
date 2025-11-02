@@ -15,6 +15,9 @@
 
   /* Accents & Actions */
   --color-accent-primary: #00ff9f; /* Futuristic Neon Green (Our Main CTA) */
+  --color-accent-secondary: #00d4ff; /* Neon Cyan/Blue accent */
+  --color-accent-tertiary: #ff00ff; /* Neon Magenta/Purple accent */
+  --color-accent-warning: #ffaa00; /* Neon Orange/Yellow accent */
   --color-accent-glow: rgba(0, 255, 157, 0.25); /* Neon glow for backgrounds */
 
   /* Borders & Misc */

@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = (await request.json()) as AnalysisRequest
-    const { channelId, videoCount = 10, depth = "standard", useMockData = false } = body
+    const { channelId, videoCount = 10, depth = "standard", useMockData = false, preferences } = body
 
     const startTime = Date.now()
 
@@ -83,7 +83,8 @@ export async function POST(request: NextRequest) {
       channelName,
       transcripts,
       totalViews,
-      subscriberCount
+      subscriberCount,
+      preferences
     )
 
     const processingTime = Date.now() - startTime

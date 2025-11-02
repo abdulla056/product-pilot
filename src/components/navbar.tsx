@@ -1,7 +1,7 @@
 import { SignedIn, UserButton } from "@clerk/nextjs"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { LayoutDashboard, Compass, TrendingUp, Home } from "lucide-react"
+import { LayoutDashboard, TrendingUp, Home } from "lucide-react"
 
 export function Navbar() {
   return (
@@ -36,16 +36,6 @@ export function Navbar() {
                 >
                   <LayoutDashboard className="h-4 w-4 mr-2" />
                   Dashboard
-                </Button>
-              </Link>
-              <Link href="/onboarding/strategy">
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-accent-glow)] border-transparent hover:border-[var(--color-border-subtle)]"
-                >
-                  <Compass className="h-4 w-4 mr-2" />
-                  Onboarding
                 </Button>
               </Link>
               <Link href="/analytics">

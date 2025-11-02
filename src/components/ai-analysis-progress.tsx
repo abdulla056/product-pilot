@@ -83,15 +83,15 @@ export function AIAnalysisProgress({ open, onOpenChange }: AIAnalysisProgressPro
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md" onInteractOutside={(e) => e.preventDefault()}>
+      <DialogContent className="sm:max-w-md bg-[var(--color-bg-card)] border-2 border-[var(--color-border-subtle)]" onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-purple-100 rounded-full">
-              <Sparkles className="h-8 w-8 text-purple-600 animate-pulse" />
+            <div className="p-3 bg-[var(--color-bg-glass)] rounded-full">
+              <Sparkles className="h-8 w-8 text-[var(--color-accent-primary)] animate-pulse" />
             </div>
           </div>
-          <DialogTitle className="text-center text-2xl">AI Analysis in Progress</DialogTitle>
-          <DialogDescription className="text-center">
+          <DialogTitle className="text-center text-2xl text-[var(--color-text-primary)]">AI Analysis in Progress</DialogTitle>
+          <DialogDescription className="text-center text-[var(--color-text-secondary)]">
             Our AI agents are analyzing your creator graph. This may take 1-2 minutes.
           </DialogDescription>
         </DialogHeader>
@@ -100,7 +100,7 @@ export function AIAnalysisProgress({ open, onOpenChange }: AIAnalysisProgressPro
           {/* Progress Bar */}
           <div className="space-y-2">
             <Progress value={progress} className="h-2" />
-            <p className="text-xs text-center text-gray-500">
+            <p className="text-xs text-center text-[var(--color-text-secondary)]">
               {Math.round(progress)}% complete
             </p>
           </div>
@@ -117,35 +117,35 @@ export function AIAnalysisProgress({ open, onOpenChange }: AIAnalysisProgressPro
                   key={step.id}
                   className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
                     isCurrent
-                      ? "bg-purple-50 border-2 border-purple-600"
+                      ? "bg-[var(--color-bg-glass)] border-2 border-[var(--color-accent-primary)]"
                       : isComplete
-                      ? "bg-green-50 border border-green-200"
-                      : "bg-gray-50 border border-gray-200"
+                      ? "bg-[var(--color-bg-glass)] border border-[var(--color-accent-primary)]/50"
+                      : "bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)]"
                   }`}
                 >
                   <div
                     className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
                       isComplete
-                        ? "bg-green-500"
+                        ? "bg-[var(--color-accent-primary)]"
                         : isCurrent
-                        ? "bg-purple-600 animate-pulse"
-                        : "bg-gray-300"
+                        ? "bg-[var(--color-accent-primary)] animate-pulse"
+                        : "bg-[var(--color-bg-glass)]"
                     }`}
                   >
                     {isComplete ? (
-                      <CheckCircle2 className="h-5 w-5 text-white" />
+                      <CheckCircle2 className="h-5 w-5 text-[var(--color-text-dark)]" />
                     ) : (
-                      <Icon className={`h-5 w-5 ${isCurrent ? "text-white" : "text-gray-500"}`} />
+                      <Icon className={`h-5 w-5 ${isCurrent ? "text-[var(--color-text-dark)]" : "text-[var(--color-text-secondary)]"}`} />
                     )}
                   </div>
                   <div className="flex-1">
                     <p
                       className={`text-sm font-medium ${
                         isCurrent
-                          ? "text-purple-900"
+                          ? "text-[var(--color-text-primary)]"
                           : isComplete
-                          ? "text-green-900"
-                          : "text-gray-500"
+                          ? "text-[var(--color-accent-primary)]"
+                          : "text-[var(--color-text-secondary)]"
                       }`}
                     >
                       {step.label}
@@ -153,9 +153,9 @@ export function AIAnalysisProgress({ open, onOpenChange }: AIAnalysisProgressPro
                   </div>
                   {isCurrent && (
                     <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                      <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                      <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                      <div className="w-2 h-2 bg-[var(--color-accent-primary)] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <div className="w-2 h-2 bg-[var(--color-accent-primary)] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <div className="w-2 h-2 bg-[var(--color-accent-primary)] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                     </div>
                   )}
                 </div>
@@ -163,9 +163,9 @@ export function AIAnalysisProgress({ open, onOpenChange }: AIAnalysisProgressPro
             })}
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-            <p className="text-xs text-blue-800 text-center">
-              💡 <strong>Tip:</strong> The AI is analyzing your videos, audience engagement, and market data to find the best product opportunities for you.
+          <div className="bg-[var(--color-bg-glass)] border border-[var(--color-border-subtle)] rounded-lg p-3">
+            <p className="text-xs text-[var(--color-text-secondary)] text-center">
+              💡 <strong className="text-[var(--color-accent-primary)]">Tip:</strong> The AI is analyzing your videos, audience engagement, and market data to find the best product opportunities for you.
             </p>
           </div>
         </div>

@@ -1,17 +1,29 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Code, Package, Sparkles } from "lucide-react"
-
-type ModelOption = "digital" | "physical" | "both" | null
+import { getOnboardingState } from "@/lib/onboarding-storage"
+import type { ProductModelPreference } from "@/types/onboarding"
 
 export default function ModelPage() {
-  const [selectedModel, setSelectedModel] = useState<ModelOption>(null)
+  const [selectedModel, setSelectedModel] = useState<ProductModelPreference | null>(null)
   const router = useRouter()
+
+  useEffect(() => {
+    // Load saved preference if exists
+    const state = getOnboardingState()
+    if (state.preferences?.productModel) {
+      setSelectedModel(state.preferences.productModel)
+    }
+  }, [])
 
   const handleContinue = () => {
     if (selectedModel) {
+      // Save to session storage for use in next step
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("onboarding_model", selectedModel)
+      }
       router.push("/onboarding/budget")
     }
   }

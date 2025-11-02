@@ -1,17 +1,29 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Users, TrendingUp, Scale, ArrowRight } from "lucide-react"
-
-type GoalOption = "audience-first" | "market-first" | "balanced" | null
+import { getOnboardingState } from "@/lib/onboarding-storage"
+import type { StrategyPreference } from "@/types/onboarding"
 
 export default function OnboardingPage() {
-  const [selectedOption, setSelectedOption] = useState<GoalOption>(null)
+  const [selectedOption, setSelectedOption] = useState<StrategyPreference | null>(null)
   const router = useRouter()
+
+  useEffect(() => {
+    // Load saved preference if exists
+    const state = getOnboardingState()
+    if (state.preferences?.strategy) {
+      setSelectedOption(state.preferences.strategy)
+    }
+  }, [])
 
   const handleContinue = () => {
     if (selectedOption) {
+      // Save to session storage for use in next step
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("onboarding_strategy", selectedOption)
+      }
       router.push("/onboarding/model")
     }
   }
