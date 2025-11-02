@@ -49,11 +49,21 @@ export default function VendorsPage() {
       } catch (e) {
         console.error("Error parsing vendors data:", e)
       }
+    } else {
+      // If no vendors in localStorage, load default hardcoded vendors
+      loadDefaultVendors()
     }
 
     setOnboarding(onboardingData)
     setLoading(false)
   }, [])
+
+  const loadDefaultVendors = async () => {
+    // Import and use the recommendVendors function to get hardcoded vendors
+    const { recommendVendors } = await import("@/lib/vendor-recommendations")
+    const defaultVendors = await recommendVendors("both", "small")
+    setVendors(defaultVendors)
+  }
 
   useEffect(() => {
     // Get user location and enrich vendors with coordinates after initial load
