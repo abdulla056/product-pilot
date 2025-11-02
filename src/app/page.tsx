@@ -1,22 +1,47 @@
 "use client"
 
 import { useUser } from "@clerk/nextjs"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Youtube, Sparkles, CheckCircle2, ArrowRight } from "lucide-react"
+import { Youtube, Sparkles, CheckCircle2, ArrowRight, Loader2 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { ConnectYouTubeButton } from "@/components/connect-youtube-button"
 
 export default function LandingPage() {
   const { isSignedIn, isLoaded } = useUser()
   const router = useRouter()
+  const [isCheckingConnection, setIsCheckingConnection] = useState(false)
+  const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {
-    if (isLoaded && isSignedIn) {
-      router.push("/home")
+    const checkConnection = async () => {
+      if (!isLoaded || !isSignedIn) {
+        return
+      }
+
+      try {
+        setIsCheckingConnection(true)
+        const response = await fetch("/api/youtube/check")
+        const data = await response.json()
+
+        if (data.connected) {
+          setIsConnected(true)
+          router.push("/home")
+        } else {
+          setIsConnected(false)
+        }
+      } catch (error) {
+        console.error("Error checking YouTube connection:", error)
+        setIsConnected(false)
+      } finally {
+        setIsCheckingConnection(false)
+      }
     }
+
+    checkConnection()
   }, [isLoaded, isSignedIn, router])
 
   const handleConnectYouTube = () => {
@@ -30,15 +55,18 @@ export default function LandingPage() {
     }
   }
 
-  if (!isLoaded) {
+  if (!isLoaded || isCheckingConnection) {
     return (
       <main className="min-h-screen flex items-center justify-center">
-        <div className="text-[var(--color-text-primary)]">Loading...</div>
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 text-[var(--color-accent-primary)] animate-spin mx-auto mb-4" />
+          <div className="text-[var(--color-text-primary)]">Loading...</div>
+        </div>
       </main>
     )
   }
 
-  if (isSignedIn) {
+  if (isSignedIn && isConnected) {
     return null // Will redirect
   }
 
@@ -78,21 +106,30 @@ export default function LandingPage() {
               Get Started
             </CardTitle>
             <CardDescription className="text-lg text-[var(--color-text-secondary)]">
-              Sign in and connect your YouTube account to begin discovering product opportunities
+              {isSignedIn 
+                ? "Connect your YouTube account to begin discovering product opportunities"
+                : "Sign in and connect your YouTube account to begin discovering product opportunities"
+              }
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Action Buttons */}
             <div className="flex justify-center">
-              <Link href="/hatch/strategy">
-                <Button
-                  size="lg"
-                  className="w-full text-lg py-6 h-auto"
-                >
-                  Start Hatching
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
+              {isSignedIn ? (
+                <div className="w-full">
+                  <ConnectYouTubeButton size="lg" fullWidth className="text-lg py-6 h-auto" />
+                </div>
+              ) : (
+                <Link href="/sign-in">
+                  <Button
+                    size="lg"
+                    className="w-full text-lg py-6 h-auto"
+                  >
+                    Sign In to Get Started
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+              )}
             </div>
 
             {/* Benefits List */}
