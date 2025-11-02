@@ -178,7 +178,7 @@ export function YouTubeVideosList() {
                   href={`https://youtube.com/watch?v=${video.id}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center"
+                  className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center"
                 >
                   <div className="bg-[var(--color-accent-primary)] rounded-full p-3 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Youtube className="h-6 w-6 text-[var(--color-text-dark)]" />

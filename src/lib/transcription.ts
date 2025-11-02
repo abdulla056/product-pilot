@@ -28,11 +28,12 @@ export async function getVideoTranscript(
       },
     })
 
-    console.log("[transcription] Captions list result:", JSON.stringify(captionsListResult, null, 2))
-
     // Check if there was an error (like 403 Forbidden for non-owned videos)
     if (captionsListResult?.error || !captionsListResult?.successful) {
-      console.log("[transcription] Cannot access captions (likely not video owner):", captionsListResult?.error)
+      const errorDetails = captionsListResult?.error || "Unknown error"
+      const errorMessage = typeof errorDetails === "string" ? errorDetails : JSON.stringify(errorDetails)
+      console.log(`[transcription] Cannot access captions for video ${videoId}. Error:`, errorMessage)
+      console.log(`[transcription] This usually means the video doesn't belong to your YouTube account.`)
       return null
     }
 
@@ -101,7 +102,11 @@ export async function getVideoTranscript(
     console.log("[transcription] No transcript data in response")
     return null
   } catch (error: any) {
-    console.error("[transcription] Error getting video transcript:", error?.message || error)
+    const errorMessage = error?.message || error?.toString() || "Unknown error"
+    console.error(`[transcription] Error getting video transcript for ${videoId}:`, errorMessage)
+    if (error?.stack) {
+      console.error("[transcription] Stack trace:", error.stack)
+    }
     return null
   }
 }
@@ -170,69 +175,160 @@ export async function getVideoDetailsWithStats(
 }
 
 /**
- * Transcribe multiple videos and return formatted VideoTranscript objects
+ * Process a single video (optimized helper)
+ * Fetches transcript first, then details only if transcript is available
+ */
+async function processVideo(
+  entityId: string,
+  videoId: string,
+  useAIFallback: boolean = false
+): Promise<VideoTranscript | null> {
+  try {
+    // Step 1: Try to get transcript first (lighter operation)
+    let transcript = await getVideoTranscript(entityId, videoId)
+    
+    // Step 2: Only fetch video details if we have a transcript (or if using AI fallback)
+    if (!transcript && !useAIFallback) {
+      console.log(`[transcription] No transcript available for ${videoId}, skipping...`)
+      return null // Skip immediately - don't waste time fetching details
+    }
+    
+    // Fetch video details in parallel with transcript (if transcript exists)
+    // OR fetch only if we need it for AI fallback
+    const videoDetailsPromise = getVideoDetailsWithStats(entityId, videoId)
+    
+    // If we already have transcript, we can fetch details while processing
+    // Otherwise wait for details first (needed for AI fallback)
+    const videoDetails = await videoDetailsPromise
+    
+    if (!videoDetails) {
+      console.log(`[transcription] Could not fetch details for video ${videoId}`)
+      return null
+    }
+    
+    // If no transcript and AI fallback is enabled, generate one
+    if (!transcript && useAIFallback) {
+      console.log(`[transcription] No captions available for video ${videoId}. Using AI fallback based on metadata...`)
+      try {
+        transcript = await generateAITranscriptFallback(videoDetails)
+        
+        if (!transcript) {
+          console.warn(`[transcription] AI fallback failed for video ${videoId}`)
+          return null
+        }
+        
+        console.log(`[transcription] ✓ AI fallback successful for video ${videoId} (${transcript.length} chars)`)
+      } catch (error: any) {
+        console.error(`[transcription] AI fallback error for video ${videoId}:`, error?.message || error)
+        return null
+      }
+    }
+    
+    if (!transcript) {
+      return null
+    }
+    
+    // Build VideoTranscript object
+    return {
+      videoId,
+      title: videoDetails.snippet?.title || "Untitled",
+      description: videoDetails.snippet?.description || "",
+      publishedAt: videoDetails.snippet?.publishedAt || new Date().toISOString(),
+      transcript,
+      duration: videoDetails.contentDetails?.duration || "PT0S",
+      viewCount: parseInt(videoDetails.statistics?.viewCount || "0"),
+      likeCount: parseInt(videoDetails.statistics?.likeCount || "0"),
+      commentCount: parseInt(videoDetails.statistics?.commentCount || "0"),
+      tags: videoDetails.snippet?.tags || [],
+    }
+  } catch (error) {
+    console.error(`[transcription] Error processing video ${videoId}:`, error)
+    return null
+  }
+}
+
+/**
+ * Process videos in batches with controlled concurrency
  * @param entityId - Entity/User ID
  * @param videoIds - Array of YouTube video IDs
+ * @param batchSize - Number of videos to process concurrently (default: 3)
+ * @param useAIFallback - Whether to use AI fallback for videos without captions (default: false)
+ * @returns Array of VideoTranscript objects
+ */
+async function processBatch(
+  entityId: string,
+  videoIds: string[],
+  batchSize: number = 3,
+  useAIFallback: boolean = false
+): Promise<VideoTranscript[]> {
+  const transcripts: VideoTranscript[] = []
+  
+  // Process videos in batches to avoid rate limits
+  for (let i = 0; i < videoIds.length; i += batchSize) {
+    const batch = videoIds.slice(i, i + batchSize)
+    console.log(`[transcription] Processing batch ${Math.floor(i / batchSize) + 1}: ${batch.length} videos`)
+    
+    // Process batch in parallel
+    const batchResults = await Promise.allSettled(
+      batch.map(videoId => processVideo(entityId, videoId, useAIFallback))
+    )
+    
+    // Collect successful results and log failures
+    for (const result of batchResults) {
+      if (result.status === "fulfilled" && result.value) {
+        transcripts.push(result.value)
+        console.log(`[transcription] ✓ Successfully processed: "${result.value.title}"`)
+      } else if (result.status === "rejected") {
+        console.error(`[transcription] ✗ Failed to process video:`, result.reason)
+      } else if (result.status === "fulfilled" && !result.value) {
+        console.warn(`[transcription] ⚠ Video processed but no transcript available`)
+      }
+    }
+  }
+  
+  return transcripts
+}
+
+/**
+ * Transcribe multiple videos and return formatted VideoTranscript objects
+ * OPTIMIZED VERSION: Processes videos in parallel batches for better performance
+ * @param entityId - Entity/User ID
+ * @param videoIds - Array of YouTube video IDs
+ * @param options - Optional configuration
  * @returns Array of VideoTranscript objects
  */
 export async function transcribeVideos(
   entityId: string,
-  videoIds: string[]
-): Promise<VideoTranscript[]> {
-  console.log(`[transcription] Starting transcription for ${videoIds.length} videos`)
-  
-  const transcripts: VideoTranscript[] = []
-  
-  for (const videoId of videoIds) {
-    try {
-      console.log(`[transcription] Processing video ${videoId}...`)
-      
-      // Get video details
-      const videoDetails = await getVideoDetailsWithStats(entityId, videoId)
-      
-      if (!videoDetails) {
-        console.log(`[transcription] Could not fetch details for video ${videoId}, skipping...`)
-        continue
-      }
-      
-      // Try to get real transcript first
-      let transcript = await getVideoTranscript(entityId, videoId)
-      
-      // If no transcript available, use AI fallback
-      if (!transcript) {
-        console.log(`[transcription] No captions available for video ${videoId}, using AI fallback...`)
-        transcript = await generateAITranscriptFallback(videoDetails)
-        
-        if (!transcript) {
-          console.log(`[transcription] AI fallback also failed for video ${videoId}, skipping...`)
-          continue
-        }
-      }
-      
-      // Build VideoTranscript object
-      const videoTranscript: VideoTranscript = {
-        videoId,
-        title: videoDetails.snippet?.title || "Untitled",
-        description: videoDetails.snippet?.description || "",
-        publishedAt: videoDetails.snippet?.publishedAt || new Date().toISOString(),
-        transcript,
-        duration: videoDetails.contentDetails?.duration || "PT0S",
-        viewCount: parseInt(videoDetails.statistics?.viewCount || "0"),
-        likeCount: parseInt(videoDetails.statistics?.likeCount || "0"),
-        commentCount: parseInt(videoDetails.statistics?.commentCount || "0"),
-        tags: videoDetails.snippet?.tags || [],
-      }
-      
-      transcripts.push(videoTranscript)
-      console.log(`[transcription] Successfully transcribed: "${videoTranscript.title}"`)
-      
-    } catch (error) {
-      console.error(`[transcription] Error processing video ${videoId}:`, error)
-      continue
-    }
+  videoIds: string[],
+  options?: {
+    batchSize?: number // Number of videos to process concurrently (default: 3)
+    useAIFallback?: boolean // Use AI fallback for videos without captions (default: false)
   }
+): Promise<VideoTranscript[]> {
+  const batchSize = options?.batchSize || 3
+  const useAIFallback = options?.useAIFallback || false
   
-  console.log(`[transcription] Completed: ${transcripts.length}/${videoIds.length} videos transcribed`)
+  console.log(`[transcription] Starting transcription for ${videoIds.length} videos`)
+  console.log(`[transcription] Settings: Batch size=${batchSize}, AI Fallback=${useAIFallback ? "enabled" : "disabled"}`)
+  
+  const startTime = Date.now()
+  const transcripts = await processBatch(entityId, videoIds, batchSize, useAIFallback)
+  const duration = ((Date.now() - startTime) / 1000).toFixed(1)
+  
+  const successCount = transcripts.length
+  const failureCount = videoIds.length - successCount
+  console.log(`[transcription] ========================================`)
+  console.log(`[transcription] SUMMARY: ${successCount}/${videoIds.length} videos processed successfully`)
+  if (failureCount > 0) {
+    console.log(`[transcription] WARNING: ${failureCount} video(s) could not be transcribed`)
+    console.log(`[transcription] Possible reasons:`)
+    console.log(`[transcription]   - Videos don't belong to your YouTube account`)
+    console.log(`[transcription]   - Videos have no captions enabled`)
+    console.log(`[transcription]   - API errors or network issues`)
+  }
+  console.log(`[transcription] Total time: ${duration}s`)
+  console.log(`[transcription] ========================================`)
+  
   return transcripts
 }
 
@@ -276,8 +372,15 @@ export async function getAndTranscribeChannelVideos(
     
     console.log(`[transcription] Found ${videoIds.length} videos to transcribe`)
     
-    // Transcribe all videos
-    const transcripts = await transcribeVideos(entityId, videoIds)
+    // Transcribe all videos with optimized parallel processing
+    // Process fewer videos and in smaller batches for speed
+    const videosToProcess = videoIds.slice(0, 5) // Only process first 5 videos for speed
+    console.log(`[transcription] Processing ${videosToProcess.length} videos (limited for speed)`)
+    
+    const transcripts = await transcribeVideos(entityId, videosToProcess, {
+      batchSize: 5, // Process all 5 videos concurrently (faster)
+      useAIFallback: true, // Enable AI fallback to process videos without accessible captions
+    })
     
     return transcripts
   } catch (error) {

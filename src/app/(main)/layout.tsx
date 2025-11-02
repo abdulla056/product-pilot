@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/navbar"
+import { YouTubeConnectionGuard } from "@/components/youtube-connection-guard"
 
 export default function MainLayout({
   children,
@@ -8,7 +9,9 @@ export default function MainLayout({
   return (
     <>
       <Navbar />
-      {children}
+      <YouTubeConnectionGuard>
+        {children}
+      </YouTubeConnectionGuard>
     </>
   )
 }

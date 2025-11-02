@@ -17,23 +17,34 @@ export async function GET(request: NextRequest) {
     if (error) {
       console.error("YouTube connection error:", error)
       return NextResponse.redirect(
-        new URL("/dashboard?error=connection_failed", request.url)
+        new URL("/home?error=connection_failed", request.url)
       )
     }
 
     if (status === "success") {
-      // Redirect back to dashboard with success message
+      // Check if user was in hatch flow (check for hatch data in session/cookie)
+      // If hatch data exists, redirect to processing page
+      // Otherwise redirect to home
+      const hasHatchData = request.cookies.get("hatch_in_progress")
+      
+      if (hasHatchData) {
+        return NextResponse.redirect(
+          new URL("/hatch/processing", request.url)
+        )
+      }
+      
+      // Redirect back to home with success message
       return NextResponse.redirect(
-        new URL("/dashboard?connected=youtube", request.url)
+        new URL("/home?connected=youtube", request.url)
       )
     }
 
     // Default redirect
-    return NextResponse.redirect(new URL("/dashboard", request.url))
+    return NextResponse.redirect(new URL("/home", request.url))
   } catch (error) {
     console.error("Error in YouTube callback:", error)
     return NextResponse.redirect(
-      new URL("/dashboard?error=callback_failed", request.url)
+      new URL("/home?error=callback_failed", request.url)
     )
   }
 }

@@ -32,10 +32,15 @@ export function ValidationPreview() {
         <div className="grid md:grid-cols-3 gap-8">
           {validations.map((validation, index) => {
             const Icon = validation.icon
+            const iconColors = [
+              "text-green-400", // Target icon - green
+              "text-yellow-400", // TrendingUp icon - yellow
+              "text-blue-400", // Shield icon - blue
+            ]
             return (
               <Card key={index} className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)]">
                 <CardHeader>
-                  <Icon className="w-10 h-10 text-[var(--color-accent-primary)] mb-4" />
+                  <Icon className={`w-10 h-10 ${iconColors[index]} mb-4`} />
                   <CardTitle className="text-xl text-[var(--color-text-primary)]">
                     {validation.title}
                   </CardTitle>

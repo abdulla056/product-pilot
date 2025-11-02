@@ -6,7 +6,7 @@ export function Testimonials() {
     {
       name: "Sarah Chen",
       role: "Tech YouTuber",
-      content: "Viz-I helped me identify a digital course idea that my audience was already asking for. Launched it in 2 weeks!",
+      content: "Hatch helped me identify a digital course idea that my audience was already asking for. Launched it in 2 weeks!",
       rating: 5,
     },
     {
@@ -30,7 +30,7 @@ export function Testimonials() {
           Creator Success Stories
         </h2>
         <p className="text-xl text-center text-[var(--color-text-secondary)] mb-12 max-w-2xl mx-auto">
-          See how creators are using Viz-I to launch successful products
+          See how creators are using Hatch to launch successful products
         </p>
         <div className="grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
@@ -40,7 +40,7 @@ export function Testimonials() {
                   {Array.from({ length: testimonial.rating }).map((_, i) => (
                     <Star
                       key={i}
-                      className="w-5 h-5 fill-[var(--color-accent-primary)] text-[var(--color-accent-primary)]"
+                      className="w-5 h-5 fill-yellow-400 text-yellow-400"
                     />
                   ))}
                 </div>

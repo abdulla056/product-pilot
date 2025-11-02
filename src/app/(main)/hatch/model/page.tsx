@@ -33,19 +33,19 @@ export default function ModelPage() {
       id: "digital" as const,
       icon: Code,
       title: "Digital Products",
-      description: "E-books, courses, presets. High-margin, no inventory.",
+      description: "Zero inventory costs, instant scalability. Sell 24/7.",
     },
     {
       id: "physical" as const,
       icon: Package,
       title: "Physical Products",
-      description: "Apparel, equipment, merch. Builds a physical brand.",
+      description: "Builds tangible brand presence. Requires inventory and shipping.",
     },
     {
       id: "both" as const,
       icon: Sparkles,
       title: "Show Me Both",
-      description: "Show me the best opportunity, regardless of type.",
+      description: "Shows the best opportunities from both categories.",
     },
   ]
 
@@ -54,12 +54,9 @@ export default function ModelPage() {
       <div className="w-full max-w-2xl p-8 bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] rounded-2xl shadow-2xl">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-3 text-[var(--color-text-primary)]">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-[var(--color-text-primary)]">
             What&apos;s your product model?
           </h1>
-          <p className="text-lg sm:text-xl text-[var(--color-text-secondary)]">
-            This helps us filter for digital-only ideas or products that require shipping.
-          </p>
         </div>
 
         {/* Options Grid */}
@@ -102,7 +99,7 @@ export default function ModelPage() {
                 </h3>
 
                 {/* Description */}
-                <p className="text-sm sm:text-base leading-relaxed text-[var(--color-text-secondary)]">
+                <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
                   {option.description}
                 </p>
               </button>

@@ -35,11 +35,16 @@ export function ProductTypes() {
         <div className="grid md:grid-cols-3 gap-8">
           {productTypes.map((product, index) => {
             const Icon = product.icon
+            const iconColors = [
+              "text-purple-400", // Code icon - purple
+              "text-orange-400", // Package icon - orange
+              "text-cyan-400", // Users icon - cyan
+            ]
             return (
               <Card key={index} className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] hover:border-[var(--color-accent-primary)] transition-colors">
                 <CardHeader>
                   <div className="mb-4">
-                    <Icon className="w-12 h-12 text-[var(--color-accent-primary)]" />
+                    <Icon className={`w-12 h-12 ${iconColors[index]}`} />
                   </div>
                   <CardTitle className="text-2xl text-[var(--color-text-primary)] mb-2">
                     {product.title}

@@ -61,13 +61,13 @@ export default function BudgetPage() {
       id: "small" as const,
       icon: Wallet,
       title: "$$ (Small Batch)",
-      description: "I&apos;m willing to invest a few hundred or thousand for a high-quality test batch.",
+      description: "I'm willing to invest a few hundred or thousand for a high-quality test batch.",
     },
     {
       id: "all" as const,
       icon: Landmark,
       title: "$$$ (All In)",
-      description: "I&apos;m ready to invest in a large, custom-manufactured order.",
+      description: "I'm ready to invest in a large, custom-manufactured order.",
     },
   ]
 
