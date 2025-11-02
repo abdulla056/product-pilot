@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test:ai": "npx tsx scripts/test-ai-analysis.ts",
-    "test:transcription": "npx tsx scripts/test-transcription.ts"
+    "test:transcription": "npx tsx scripts/test-transcription.ts",
+    "verify:maps": "npx tsx scripts/verify-google-maps-setup.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.34.1",
