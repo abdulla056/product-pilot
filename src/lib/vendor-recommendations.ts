@@ -12,6 +12,11 @@ export interface Vendor {
   rating: number
   minOrder: string
   specialties: string[]
+  coordinates?: {
+    lat: number
+    lng: number
+  }
+  placeId?: string
   contact?: {
     website?: string
     phone?: string

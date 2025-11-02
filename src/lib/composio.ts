@@ -1,8 +1,84 @@
-import { Composio } from "composio-core"
+// Server-side only module - DO NOT import in client components
+// Composio requires server-side environment variables
 
-// Initialize Composio client
-export const composio = new Composio({
-  apiKey: process.env.COMPOSIO_API_KEY,
+// Mark this file as server-only to prevent client-side bundling
+if (typeof window !== "undefined") {
+  throw new Error(
+    "This module cannot be imported in client components. " +
+    "Composio can only be used in server-side code (API routes, Server Components)."
+  )
+}
+
+// Use dynamic require at runtime to prevent bundling issues
+// This ensures Composio is only loaded when actually needed
+
+// Initialize Composio client only on server side
+// This prevents client-side initialization errors when COMPOSIO_API_KEY is not available
+let composioInstance: InstanceType<typeof import("composio-core").Composio> | null = null
+
+function getComposioClient() {
+  // Ensure this only runs on the server
+  if (typeof window !== "undefined") {
+    throw new Error(
+      "Composio client can only be used on the server side. " +
+      "Make sure you're not importing composio.ts in client components. " +
+      "If you need Composio functionality, use it through API routes."
+    )
+  }
+
+  // Synchronous initialization for backward compatibility
+  // Note: This will throw if called on client side (checked above)
+  if (!composioInstance) {
+    // Use dynamic require at runtime to avoid bundling issues
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { Composio } = require("composio-core")
+    
+    const apiKey = process.env.COMPOSIO_API_KEY
+    if (!apiKey) {
+      throw new Error(
+        "COMPOSIO_API_KEY is not set in environment variables. " +
+        "Please add it to your .env.local file: COMPOSIO_API_KEY=comp_your_key_here"
+      )
+    }
+    
+    composioInstance = new Composio({
+      apiKey: apiKey,
+    })
+  }
+
+  return composioInstance
+}
+
+// Export a function that ensures server-side only usage
+export { getComposioClient }
+
+// For backward compatibility, export composio as a lazy getter
+// This prevents immediate initialization during module load
+// WARNING: This will throw if accessed on client side
+export const composio = new Proxy({} as any, {
+  get(_target, prop) {
+    try {
+      const client = getComposioClient()
+      const value = (client as any)[prop]
+      
+      // If it's a function, bind it to maintain 'this' context
+      if (typeof value === "function") {
+        return value.bind(client)
+      }
+      
+      return value
+    } catch (error: any) {
+      // Provide helpful error message
+      if (error.message.includes("window")) {
+        throw new Error(
+          "Cannot use Composio on the client side. " +
+          "This module was imported in a client component. " +
+          "Move the Composio usage to an API route or server component."
+        )
+      }
+      throw error
+    }
+  }
 })
 
 // YouTube toolkit configuration
@@ -51,6 +127,40 @@ export async function initializeYouTubeConnection(
 }
 
 /**
+ * Disconnect YouTube connection for a user
+ * @param entityId - Entity/User ID
+ * @returns Success status
+ */
+export async function disconnectYouTubeConnection(entityId: string) {
+  try {
+    const entity = await composio.getEntity(entityId)
+    
+    // Get all connections to find YouTube connection ID
+    const connections = await entity.getConnections()
+    const youtubeConnection = connections.find(
+      (conn: any) => conn.appName === "YOUTUBE" || conn.appUniqueId?.includes("youtube")
+    )
+
+    if (!youtubeConnection || !youtubeConnection.id) {
+      throw new Error("No YouTube connection found")
+    }
+
+    // Delete the connection using connectedAccounts.delete
+    await composio.connectedAccounts.delete({
+      connectedAccountId: youtubeConnection.id,
+    })
+
+    return {
+      success: true,
+      message: "YouTube connection disconnected successfully",
+    }
+  } catch (error: any) {
+    console.error("Error disconnecting YouTube connection:", error)
+    throw new Error(error?.message || "Failed to disconnect YouTube connection")
+  }
+}
+
+/**
  * Get connected account details
  * @param connectedAccountId - Connection ID
  * @returns Connected account details
@@ -63,186 +173,6 @@ export async function getConnectedAccount(connectedAccountId: string) {
     return connectedAccount
   } catch (error) {
     console.error("Error getting connected account:", error)
-    throw error
-  }
-}
-
-/**
- * Get user's YouTube channel statistics
- * @param entityId - Entity/User ID
- * @param channelId - YouTube channel ID
- * @returns Channel statistics
- */
-export async function getChannelStatistics(entityId: string, channelId: string) {
-  try {
-    const entity = await composio.getEntity(entityId)
-    const result = await entity.execute({
-      actionName: "YOUTUBE_GET_CHANNEL_STATISTICS",
-      params: {
-        id: channelId,
-        part: "statistics,snippet",
-      },
-    })
-    return result
-  } catch (error) {
-    console.error("Error getting channel statistics:", error)
-    throw error
-  }
-}
-
-/**
- * List user's YouTube videos
- * @param entityId - Entity/User ID
- * @param channelId - YouTube channel ID
- * @param maxResults - Maximum number of results (default: 10)
- * @returns List of videos
- */
-export async function listChannelVideos(
-  entityId: string,
-  channelId: string,
-  maxResults: number = 10
-) {
-  try {
-    const entity = await composio.getEntity(entityId)
-    const result = await entity.execute({
-      actionName: "YOUTUBE_LIST_CHANNEL_VIDEOS",
-      params: {
-        channelId,
-        maxResults,
-        part: "snippet,contentDetails,statistics",
-      },
-    })
-    return result
-  } catch (error) {
-    console.error("Error listing channel videos:", error)
-    throw error
-  }
-}
-
-/**
- * Get video details
- * @param entityId - Entity/User ID
- * @param videoId - YouTube video ID
- * @returns Video details
- */
-export async function getVideoDetails(entityId: string, videoId: string) {
-  try {
-    const entity = await composio.getEntity(entityId)
-    const result = await entity.execute({
-      actionName: "YOUTUBE_VIDEO_DETAILS",
-      params: {
-        id: videoId,
-        part: "snippet,contentDetails,statistics",
-      },
-    })
-    return result
-  } catch (error) {
-    console.error("Error getting video details:", error)
-    throw error
-  }
-}
-
-/**
- * Get channel activities
- * @param entityId - Entity/User ID
- * @param channelId - YouTube channel ID
- * @param maxResults - Maximum number of results (default: 25)
- * @returns Channel activities
- */
-export async function getChannelActivities(
-  entityId: string,
-  channelId: string,
-  maxResults: number = 25
-) {
-  try {
-    const entity = await composio.getEntity(entityId)
-    const result = await entity.execute({
-      actionName: "YOUTUBE_GET_CHANNEL_ACTIVITIES",
-      params: {
-        channelId,
-        maxResults,
-        part: "snippet,contentDetails",
-      },
-    })
-    return result
-  } catch (error) {
-    console.error("Error getting channel activities:", error)
-    throw error
-  }
-}
-
-/**
- * Get channel ID by handle
- * @param entityId - Entity/User ID
- * @param channelHandle - YouTube channel handle (e.g., @username)
- * @returns Channel ID
- */
-export async function getChannelIdByHandle(
-  entityId: string,
-  channelHandle: string
-) {
-  try {
-    const entity = await composio.getEntity(entityId)
-    const result = await entity.execute({
-      actionName: "YOUTUBE_GET_CHANNEL_ID_BY_HANDLE",
-      params: {
-        channel_handle: channelHandle,
-      },
-    })
-    return result
-  } catch (error) {
-    console.error("Error getting channel ID by handle:", error)
-    throw error
-  }
-}
-
-/**
- * List available captions for a video
- * @param entityId - Entity/User ID
- * @param videoId - YouTube video ID
- * @returns Available caption tracks
- */
-export async function listCaptions(entityId: string, videoId: string) {
-  try {
-    const entity = await composio.getEntity(entityId)
-    const result = await entity.execute({
-      actionName: "YOUTUBE_LIST_CAPTIONS",
-      params: {
-        videoId,
-        part: "snippet",
-      },
-    })
-    return result
-  } catch (error) {
-    console.error("Error listing captions:", error)
-    throw error
-  }
-}
-
-/**
- * Download caption/transcript for a video
- * @param entityId - Entity/User ID
- * @param captionId - Caption track ID (from listCaptions)
- * @param format - Format (srt, vtt, or sbv)
- * @returns Caption text
- */
-export async function downloadCaption(
-  entityId: string,
-  captionId: string,
-  format: "srt" | "vtt" | "sbv" = "srt"
-) {
-  try {
-    const entity = await composio.getEntity(entityId)
-    const result = await entity.execute({
-      actionName: "YOUTUBE_DOWNLOAD_CAPTION",
-      params: {
-        id: captionId,
-        tfmt: format,
-      },
-    })
-    return result
-  } catch (error) {
-    console.error("Error downloading caption:", error)
     throw error
   }
 }

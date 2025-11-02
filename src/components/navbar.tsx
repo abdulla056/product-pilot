@@ -7,6 +7,7 @@ import Image from "next/image"
 import { LayoutDashboard, TrendingUp, Home, Sparkles } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ConnectYouTubeButton } from "./connect-youtube-button"
+import { DisconnectYouTubeButton } from "./disconnect-youtube-button"
 
 export function Navbar() {
   const { isSignedIn, isLoaded } = useUser()
@@ -17,15 +18,19 @@ export function Navbar() {
     const checkYouTubeConnection = async () => {
       if (!isLoaded || !isSignedIn) {
         setIsChecking(false)
+        setIsYouTubeConnected(false)
         return
       }
 
       try {
         const response = await fetch("/api/youtube/check")
         const data = await response.json()
-        setIsYouTubeConnected(data.connected || false)
+        const connected = data.connected || false
+        setIsYouTubeConnected(connected)
+        console.log("[Navbar] YouTube connection status:", connected)
       } catch (error) {
-        console.error("Error checking YouTube connection:", error)
+        console.error("[Navbar] Error checking YouTube connection:", error)
+        // Default to not connected if check fails - this ensures button is visible
         setIsYouTubeConnected(false)
       } finally {
         setIsChecking(false)
@@ -102,11 +107,31 @@ export function Navbar() {
             </div>
           </SignedIn>
 
-          {/* User Button and Connect YouTube */}
+          {/* User Button and Connect/Disconnect YouTube */}
           <SignedIn>
             <div className="flex items-center gap-3">
-              {!isChecking && !isYouTubeConnected && (
-                <ConnectYouTubeButton size="sm" />
+              {/* Show Connect YouTube button when signed in and not connected */}
+              {isLoaded && isSignedIn && !isChecking && !isYouTubeConnected && (
+                <ConnectYouTubeButton 
+                  size="sm" 
+                  className="bg-[var(--color-accent-primary)] text-[var(--color-text-dark)] hover:opacity-90 hover:bg-[var(--color-accent-primary)] border-0 font-medium shadow-lg"
+                />
+              )}
+              {/* Show Disconnect YouTube button when signed in and connected */}
+              {isLoaded && isSignedIn && !isChecking && isYouTubeConnected && (
+                <DisconnectYouTubeButton 
+                  size="sm"
+                  onDisconnected={() => {
+                    setIsYouTubeConnected(false)
+                  }}
+                />
+              )}
+              {/* Show loading spinner while checking */}
+              {isChecking && isLoaded && isSignedIn && (
+                <div className="h-9 px-4 flex items-center justify-center gap-2 bg-black/40 rounded-full border border-[var(--color-border-subtle)]">
+                  <div className="h-3 w-3 border-2 border-[var(--color-accent-primary)] border-t-transparent rounded-full animate-spin" />
+                  <span className="text-xs text-[var(--color-text-secondary)]">Checking...</span>
+                </div>
               )}
               <UserButton 
                 afterSignOutUrl="/sign-in"

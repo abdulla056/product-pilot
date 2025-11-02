@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { Loader2, CheckCircle2, AlertCircle, Youtube, CheckCircle } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 
-type ProcessingStatus = "connecting" | "scraping" | "transcribing" | "finding_vendors" | "complete" | "error" | "needs_connection"
+type ProcessingStatus = "connecting" | "scraping" | "transcribing" | "generating_products" | "complete" | "error" | "needs_connection"
 
 export default function ProcessingPage() {
   const router = useRouter()
@@ -81,22 +81,22 @@ export default function ProcessingPage() {
           // Set all videos as transcribed
           setTranscribedVideos(Array.from({ length: result.videoCount || 0 }, (_, i) => `video-${i + 1}`))
           
-          // Move to finding vendors step
-          setStatus("finding_vendors")
+          // Move to generating products step
+          setStatus("generating_products")
           
-          // Store vendors data in localStorage for vendors page
-          if (result.vendors) {
-            localStorage.setItem("hatch_vendors", JSON.stringify(result.vendors))
+          // Store product recommendations in localStorage
+          if (result.productRecommendations) {
+            localStorage.setItem("hatch_products", JSON.stringify(result.productRecommendations))
           }
           
-          // After a moment, mark as complete and redirect to vendors page
+          // After a moment, mark as complete and redirect to product selection page
           setTimeout(() => {
             setStatus("complete")
             setData(result)
             
-            // Redirect to vendors page (Step 5)
+            // Redirect to product selection page (Step 5)
             setTimeout(() => {
-              router.push("/hatch/vendors")
+              router.push("/hatch/products")
             }, 1500)
           }, 1500)
         }
@@ -148,8 +148,8 @@ export default function ProcessingPage() {
               {status === "connecting" && "Checking YouTube Connection..."}
               {status === "scraping" && "Scraping Your YouTube Videos..."}
               {status === "transcribing" && "Transcribing Video Content..."}
-              {status === "finding_vendors" && "Finding Recommended Vendors..."}
-              {status === "complete" && "Processing Complete!"}
+              {status === "generating_products" && "Generating Product Recommendations..."}
+              {status === "complete" && "Analysis Complete!"}
               {status === "needs_connection" && "YouTube Connection Required"}
               {status === "error" && "Error Processing"}
             </h1>
@@ -159,12 +159,12 @@ export default function ProcessingPage() {
               {status === "connecting" && "Verifying your YouTube account connection..."}
               {status === "scraping" && "Fetching your recent videos for analysis..."}
               {status === "transcribing" && `Processing ${transcribedVideos.length} of ${totalVideos} videos...`}
-              {status === "finding_vendors" && "Finding vendors and suppliers based on your product requirements..."}
+              {status === "generating_products" && "Analyzing your content to generate personalized product recommendations..."}
               {status === "complete" && (
                 <>
-                  Successfully processed <strong>{data?.videoCount || 0}</strong> videos and found <strong>{data?.vendors?.length || 0}</strong> recommended vendors!
+                  Successfully processed <strong>{data?.videoCount || 0}</strong> videos and generated <strong>{data?.productRecommendations?.length || 3}</strong> product recommendations!
                   <br />
-                  Redirecting to vendor recommendations...
+                  Redirecting to product selection...
                 </>
               )}
               {status === "needs_connection" && (
@@ -262,20 +262,20 @@ export default function ProcessingPage() {
                     )}
                   </div>
 
-                  {/* Step 4: Finding Vendors */}
-                  {(status === "finding_vendors" || status === "complete") && (
+                  {/* Step 4: Generating Products */}
+                  {(status === "generating_products" || status === "complete") && (
                     <div className="flex items-center gap-3">
-                      {status === "finding_vendors" ? (
+                      {status === "generating_products" ? (
                         <Loader2 className="w-5 h-5 text-[#10b981] animate-spin flex-shrink-0" />
                       ) : (
                         <CheckCircle className="w-5 h-5 text-[#10b981] flex-shrink-0" />
                       )}
                       <span className={`text-sm ${
-                        status === "finding_vendors" 
+                        status === "generating_products" 
                           ? "text-[#10b981] font-medium" 
                           : "text-[var(--color-text-secondary)]"
                       }`}>
-                        Finding recommended vendors
+                        Generating product recommendations
                       </span>
                     </div>
                   )}

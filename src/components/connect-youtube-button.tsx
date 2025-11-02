@@ -48,6 +48,11 @@ export function ConnectYouTubeButton({
       onClick={handleConnect}
       disabled={isConnecting}
       className={`gap-2 ${fullWidth ? "w-full" : ""} ${className}`}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
       {isConnecting ? (
         <>
@@ -56,8 +61,8 @@ export function ConnectYouTubeButton({
         </>
       ) : (
         <>
-          <Youtube className={size === "lg" ? "h-5 w-5" : "h-4 w-4"} />
-          {size === "lg" ? "Connect YouTube Account" : "Connect YouTube"}
+          <Youtube className={`${size === "lg" ? "h-5 w-5" : "h-4 w-4"} flex-shrink-0`} />
+          <span>{size === "lg" ? "Connect YouTube Account" : "Connect YouTube"}</span>
         </>
       )}
     </Button>

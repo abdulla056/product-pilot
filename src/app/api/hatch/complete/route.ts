@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getYouTubeConnection, getMyYouTubeChannel } from "@/lib/composio-helpers"
 import { getChannelVideos } from "@/lib/composio-helpers"
 import { getAndTranscribeChannelVideos } from "@/lib/transcription"
-import { recommendVendors } from "@/lib/vendor-recommendations"
+import { generateProductRecommendations } from "@/lib/product-recommendations"
 
 export async function POST(request: NextRequest) {
   try {
@@ -58,12 +58,19 @@ export async function POST(request: NextRequest) {
 
     console.log(`[hatch/complete] Successfully processed ${transcripts.length} videos`)
 
-    // Step 4: Get video list for display
-    const videosResult = await getChannelVideos(entityId, channelId, 10)
+    // Step 4: Generate product recommendations based on transcripts
+    console.log(`[hatch/complete] Generating product recommendations from transcripts...`)
+    const productRecommendations = await generateProductRecommendations(
+      transcripts,
+      strategy,
+      model,
+      budget
+    )
 
-    // Step 5: Get vendor recommendations based on product type and budget
-    console.log(`[hatch/complete] Fetching vendor recommendations...`)
-    const vendors = await recommendVendors(model, budget)
+    console.log(`[hatch/complete] Generated ${productRecommendations.length} product recommendations`)
+
+    // Step 5: Get video list for display
+    const videosResult = await getChannelVideos(entityId, channelId, 10)
 
     return NextResponse.json({
       success: true,
@@ -77,7 +84,7 @@ export async function POST(request: NextRequest) {
         transcriptLength: t.transcript?.length || 0,
       })),
       videos: videosResult?.items || [],
-      vendors: vendors,
+      productRecommendations: productRecommendations,
       onboarding: {
         strategy,
         model,
