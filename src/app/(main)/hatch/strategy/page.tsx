@@ -6,13 +6,15 @@ import { Users, TrendingUp, Scale, ArrowRight } from "lucide-react"
 
 type GoalOption = "audience-first" | "market-first" | "balanced" | null
 
-export default function OnboardingPage() {
+export default function HatchStrategyPage() {
   const [selectedOption, setSelectedOption] = useState<GoalOption>(null)
   const router = useRouter()
 
   const handleContinue = () => {
     if (selectedOption) {
-      router.push("/onboarding/model")
+      // Store strategy selection in localStorage
+      localStorage.setItem("hatch_strategy", selectedOption)
+      router.push("/hatch/model")
     }
   }
 
@@ -21,19 +23,19 @@ export default function OnboardingPage() {
       id: "audience-first" as const,
       icon: Users,
       title: "Serve My Existing Community",
-      description: "Prioritize what my loyal audience is already asking for.",
+      description: "Analyzes video comments and engagement to find what your audience wants.",
     },
     {
       id: "market-first" as const,
       icon: TrendingUp,
       title: "Find a New, High-Growth Opportunity",
-      description: "Prioritize what's new and trending in the broader market.",
+      description: "Identifies trending products and opportunities in the broader market.",
     },
     {
       id: "balanced" as const,
       icon: Scale,
       title: "Show Me a Balance of Both",
-      description: "Show me authentic ideas and new market trends.",
+      description: "Combines audience needs with trending opportunities.",
     },
   ]
 
@@ -49,15 +51,10 @@ export default function OnboardingPage() {
           {/* Header */}
           <div className="mb-8 text-center">
             <h1 
-              className="text-3xl sm:text-4xl font-bold mb-3 text-[var(--color-text-primary)]"
+              className="text-3xl sm:text-4xl font-bold mb-4 text-[var(--color-text-primary)]"
             >
               What is your primary goal?
             </h1>
-            <p 
-              className="text-lg sm:text-xl text-[var(--color-text-secondary)]"
-            >
-              This will help our AI prioritize the right opportunities for you.
-            </p>
           </div>
 
           {/* Options Grid */}
@@ -111,7 +108,7 @@ export default function OnboardingPage() {
 
                   {/* Description */}
                   <p 
-                    className="text-sm sm:text-base leading-relaxed text-[var(--color-text-secondary)]"
+                    className="text-sm leading-relaxed text-[var(--color-text-secondary)]"
                   >
                     {option.description}
                   </p>

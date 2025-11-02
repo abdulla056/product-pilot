@@ -5,8 +5,9 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Youtube, Sparkles, CheckCircle2, LogIn, Rocket } from "lucide-react"
-import { SignInButton } from "@clerk/nextjs"
+import { Youtube, Sparkles, CheckCircle2, ArrowRight } from "lucide-react"
+import Link from "next/link"
+import Image from "next/image"
 
 export default function LandingPage() {
   const { isSignedIn, isLoaded } = useUser()
@@ -14,7 +15,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     if (isLoaded && isSignedIn) {
-      router.push("/dashboard")
+      router.push("/home")
     }
   }, [isLoaded, isSignedIn, router])
 
@@ -46,10 +47,17 @@ export default function LandingPage() {
       <div className="w-full max-w-4xl">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center mb-6">
-            <Rocket className="w-12 h-12 text-[var(--color-accent-primary)] mr-3" />
+          <div className="inline-flex flex-col items-center justify-center mb-6">
+            <Image
+              src="/logo.png"
+              alt="Hatch Logo"
+              width={200}
+              height={50}
+              priority={true}
+              className="mb-4"
+            />
             <h1 className="text-5xl md:text-6xl font-bold text-[var(--color-text-primary)]">
-              Welcome to <span className="text-[var(--color-accent-primary)]">Viz-I</span>
+              Welcome to <span className="text-[var(--color-accent-primary)]">Hatch</span>
             </h1>
           </div>
           <p className="text-xl md:text-2xl text-[var(--color-text-secondary)] max-w-2xl mx-auto mb-2">
@@ -63,8 +71,8 @@ export default function LandingPage() {
         {/* Main Action Card */}
         <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] mb-12">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4 w-20 h-20 rounded-full bg-[var(--color-accent-primary)]/20 flex items-center justify-center border-2 border-[var(--color-accent-primary)]/30">
-              <Youtube className="w-10 h-10 text-[var(--color-accent-primary)]" />
+            <div className="mx-auto mb-4 w-20 h-20 rounded-full bg-red-500/20 flex items-center justify-center border-2 border-red-500/30">
+              <Youtube className="w-10 h-10 text-red-500" />
             </div>
             <CardTitle className="text-3xl text-[var(--color-text-primary)] mb-2">
               Get Started
@@ -75,46 +83,36 @@ export default function LandingPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Action Buttons */}
-            <div className="grid md:grid-cols-2 gap-4">
-              <SignInButton mode="modal">
+            <div className="flex justify-center">
+              <Link href="/hatch/strategy">
                 <Button
                   size="lg"
-                  variant="secondary"
                   className="w-full text-lg py-6 h-auto"
                 >
-                  <LogIn className="w-5 h-5 mr-2" />
-                  Sign In
+                  Start Hatching
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-              </SignInButton>
-              
-              <Button
-                onClick={handleConnectYouTube}
-                size="lg"
-                className="w-full text-lg py-6 h-auto"
-              >
-                <Youtube className="w-5 h-5 mr-2" />
-                Connect YouTube
-              </Button>
+              </Link>
             </div>
 
             {/* Benefits List */}
             <div className="space-y-3 pt-6 border-t border-[var(--color-border-subtle)]">
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[var(--color-accent-primary)] mt-0.5 flex-shrink-0" />
+                <CheckCircle2 className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-[var(--color-text-primary)] font-medium">AI-Powered Content Analysis</p>
                   <p className="text-sm text-[var(--color-text-secondary)]">We analyze your videos, titles, and engagement metrics</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[var(--color-accent-primary)] mt-0.5 flex-shrink-0" />
+                <CheckCircle2 className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-[var(--color-text-primary)] font-medium">Audience Insights</p>
                   <p className="text-sm text-[var(--color-text-secondary)]">Discover what your viewers want and need most</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[var(--color-accent-primary)] mt-0.5 flex-shrink-0" />
+                <CheckCircle2 className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-[var(--color-text-primary)] font-medium">Personalized Product Ideas</p>
                   <p className="text-sm text-[var(--color-text-secondary)]">Receive AI-powered recommendations tailored to your niche</p>
@@ -128,7 +126,7 @@ export default function LandingPage() {
         <div className="grid md:grid-cols-3 gap-6">
           <Card className="bg-black/60 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] text-center">
             <CardHeader>
-              <Sparkles className="w-8 h-8 text-[var(--color-accent-primary)] mx-auto mb-2" />
+              <Sparkles className="w-8 h-8 text-purple-500 mx-auto mb-2" />
               <CardTitle className="text-xl text-[var(--color-text-primary)]">
                 AI-Powered Analysis
               </CardTitle>
@@ -142,7 +140,7 @@ export default function LandingPage() {
 
           <Card className="bg-black/60 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] text-center">
             <CardHeader>
-              <CheckCircle2 className="w-8 h-8 text-[var(--color-accent-primary)] mx-auto mb-2" />
+              <CheckCircle2 className="w-8 h-8 text-green-400 mx-auto mb-2" />
               <CardTitle className="text-xl text-[var(--color-text-primary)]">
                 Personalized Recommendations
               </CardTitle>
@@ -156,7 +154,7 @@ export default function LandingPage() {
 
           <Card className="bg-black/60 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] text-center">
             <CardHeader>
-              <Youtube className="w-8 h-8 text-[var(--color-accent-primary)] mx-auto mb-2" />
+              <Youtube className="w-8 h-8 text-red-500 mx-auto mb-2" />
               <CardTitle className="text-xl text-[var(--color-text-primary)]">
                 Secure Connection
               </CardTitle>

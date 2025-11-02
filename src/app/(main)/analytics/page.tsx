@@ -72,13 +72,13 @@ export default function AnalyticsPage() {
         {/* 1. Product Market Projection */}
         <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] mb-8">
           <CardHeader>
-            <div className="flex items-center gap-2 mb-1">
-              <Target className="w-5 h-5 text-[var(--color-accent-primary)]" />
+            <div className="flex items-center gap-3 mb-1">
+              <Target className="w-5 h-5 text-[var(--color-accent-primary)] flex-shrink-0" />
               <CardTitle className="text-2xl text-[var(--color-text-primary)]">
                 1. Product Market Projection (12 Months)
               </CardTitle>
             </div>
-            <CardDescription className="text-[var(--color-text-secondary)]">
+            <CardDescription className="text-[var(--color-text-secondary)] mt-1">
               Projected market size growth for your product category over the next year
             </CardDescription>
           </CardHeader>
@@ -179,33 +179,45 @@ export default function AnalyticsPage() {
               </div>
             </div>
             <div className="pt-4 border-t border-[var(--color-border-subtle)]">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-[var(--color-text-secondary)] mb-1">
-                    Current Market Size
-                  </p>
-                  <p className="text-2xl font-bold text-[var(--color-text-primary)]">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-5 rounded-lg bg-black/60 backdrop-blur-sm border-2 border-[var(--color-border-subtle)] hover:border-green-700/50 transition-all hover:shadow-lg hover:shadow-green-700/20">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 bg-green-700/20 rounded-lg border border-green-700/30">
+                      <DollarSign className="h-5 w-5 text-green-700" />
+                    </div>
+                    <p className="text-sm font-medium text-[var(--color-text-secondary)]">
+                      Current Market Size
+                    </p>
+                  </div>
+                  <p className="text-3xl font-bold text-white">
                     ${projectionData.marketSize[0].toLocaleString()}
                   </p>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-[var(--color-text-secondary)] mb-1">
-                    Projected in 12 Months
-                  </p>
-                  <p className="text-2xl font-bold text-[var(--color-accent-primary)]">
+                <div className="p-5 rounded-lg bg-black/60 backdrop-blur-sm border-2 border-[var(--color-border-subtle)] hover:border-green-700/50 transition-all hover:shadow-lg hover:shadow-green-700/20">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 bg-green-700/20 rounded-lg border border-green-700/30">
+                      <DollarSign className="h-5 w-5 text-green-700" />
+                    </div>
+                    <p className="text-sm font-medium text-[var(--color-text-secondary)]">
+                      Projected in 12 Months
+                    </p>
+                  </div>
+                  <p className="text-3xl font-bold text-white">
                     ${projectionData.marketSize[11].toLocaleString()}
                   </p>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-[var(--color-text-secondary)] mb-1">
-                    Projected Growth
-                  </p>
-                  <div className="flex items-center gap-1 justify-end">
-                    <ArrowUpRight className="h-4 w-4 text-[var(--color-accent-primary)]" />
-                    <p className="text-2xl font-bold text-[var(--color-accent-primary)]">
-                      +{marketGrowth}%
+                <div className="p-5 rounded-lg bg-black/60 backdrop-blur-sm border-2 border-[var(--color-accent-primary)]/30 hover:border-[var(--color-accent-primary)]/50 transition-all hover:shadow-lg hover:shadow-[var(--color-accent-primary)]/20">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 bg-[var(--color-accent-primary)]/20 rounded-lg border border-[var(--color-accent-primary)]/30">
+                      <ArrowUpRight className="h-5 w-5 text-[var(--color-accent-primary)]" />
+                    </div>
+                    <p className="text-sm font-medium text-[var(--color-text-secondary)]">
+                      Projected Growth
                     </p>
                   </div>
+                  <p className="text-3xl font-bold text-[var(--color-accent-primary)]">
+                    +{marketGrowth}%
+                  </p>
                 </div>
               </div>
             </div>
@@ -215,13 +227,13 @@ export default function AnalyticsPage() {
         {/* 2. Active Users Projection */}
         <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] mb-8">
           <CardHeader>
-            <div className="flex items-center gap-2 mb-1">
-              <Users className="w-5 h-5 text-[var(--color-accent-primary)]" />
+            <div className="flex items-center gap-3 mb-1">
+              <Users className="w-5 h-5 text-[var(--color-accent-primary)] flex-shrink-0" />
               <CardTitle className="text-2xl text-[var(--color-text-primary)]">
                 2. Active Users Projection (12 Months)
               </CardTitle>
             </div>
-            <CardDescription className="text-[var(--color-text-secondary)]">
+            <CardDescription className="text-[var(--color-text-secondary)] mt-1">
               Expected growth in active users based on market trends and product adoption
             </CardDescription>
           </CardHeader>
@@ -249,33 +261,45 @@ export default function AnalyticsPage() {
               })}
             </div>
             <div className="pt-4 border-t border-[var(--color-border-subtle)]">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-[var(--color-text-secondary)] mb-1">
-                    Current Active Users
-                  </p>
-                  <p className="text-2xl font-bold text-[var(--color-text-primary)]">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-5 rounded-lg bg-black/60 backdrop-blur-sm border-2 border-[var(--color-border-subtle)] hover:border-[var(--color-accent-primary)]/50 transition-all hover:shadow-lg hover:shadow-[var(--color-accent-primary)]/20">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 bg-[var(--color-accent-primary)]/20 rounded-lg border border-[var(--color-accent-primary)]/30">
+                      <Users className="h-5 w-5 text-[var(--color-accent-primary)]" />
+                    </div>
+                    <p className="text-sm font-medium text-[var(--color-text-secondary)]">
+                      Current Active Users
+                    </p>
+                  </div>
+                  <p className="text-3xl font-bold text-[var(--color-text-primary)]">
                     {projectionData.userProjection[0].toLocaleString()}
                   </p>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-[var(--color-text-secondary)] mb-1">
-                    Projected in 12 Months
-                  </p>
-                  <p className="text-2xl font-bold text-[var(--color-accent-primary)]">
+                <div className="p-5 rounded-lg bg-black/60 backdrop-blur-sm border-2 border-[var(--color-border-subtle)] hover:border-[var(--color-accent-primary)]/50 transition-all hover:shadow-lg hover:shadow-[var(--color-accent-primary)]/20">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 bg-[var(--color-accent-primary)]/20 rounded-lg border border-[var(--color-accent-primary)]/30">
+                      <Users className="h-5 w-5 text-[var(--color-accent-primary)]" />
+                    </div>
+                    <p className="text-sm font-medium text-[var(--color-text-secondary)]">
+                      Projected in 12 Months
+                    </p>
+                  </div>
+                  <p className="text-3xl font-bold text-[var(--color-accent-primary)]">
                     {projectionData.userProjection[11].toLocaleString()}
                   </p>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-[var(--color-text-secondary)] mb-1">
-                    Projected Growth
-                  </p>
-                  <div className="flex items-center gap-1 justify-end">
-                    <ArrowUpRight className="h-4 w-4 text-[var(--color-accent-primary)]" />
-                    <p className="text-2xl font-bold text-[var(--color-accent-primary)]">
-                      +{userGrowth}%
+                <div className="p-5 rounded-lg bg-black/60 backdrop-blur-sm border-2 border-[var(--color-accent-primary)]/30 hover:border-[var(--color-accent-primary)]/50 transition-all hover:shadow-lg hover:shadow-[var(--color-accent-primary)]/20">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 bg-[var(--color-accent-primary)]/20 rounded-lg border border-[var(--color-accent-primary)]/30">
+                      <ArrowUpRight className="h-5 w-5 text-[var(--color-accent-primary)]" />
+                    </div>
+                    <p className="text-sm font-medium text-[var(--color-text-secondary)]">
+                      Projected Growth
                     </p>
                   </div>
+                  <p className="text-3xl font-bold text-[var(--color-accent-primary)]">
+                    +{userGrowth}%
+                  </p>
                 </div>
               </div>
             </div>
@@ -285,57 +309,57 @@ export default function AnalyticsPage() {
         {/* 3. User Growth in Market */}
         <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] mb-8">
           <CardHeader>
-            <div className="flex items-center gap-2 mb-1">
-              <TrendingUp className="w-5 h-5 text-[var(--color-accent-primary)]" />
+            <div className="flex items-center gap-3 mb-1">
+              <TrendingUp className="w-5 h-5 text-[var(--color-accent-primary)] flex-shrink-0" />
               <CardTitle className="text-2xl text-[var(--color-text-primary)]">
                 3. User Growth in Market
               </CardTitle>
             </div>
-            <CardDescription className="text-[var(--color-text-secondary)]">
+            <CardDescription className="text-[var(--color-text-secondary)] mt-1">
               Market share analysis and competitive positioning for user acquisition
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-3 gap-6 mb-6">
-              <div className="p-4 rounded-lg bg-black/40 border border-[var(--color-border-subtle)]">
-                <p className="text-sm text-[var(--color-text-secondary)] mb-2">
+              <div className="p-4 rounded-lg bg-black/40 border border-[var(--color-border-subtle)] flex flex-col">
+                <p className="text-sm text-[var(--color-text-secondary)] mb-3">
                   Market Growth Rate
                 </p>
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-[var(--color-accent-primary)]" />
+                <div className="flex items-center gap-2 mb-2">
+                  <TrendingUp className="h-5 w-5 text-[var(--color-accent-primary)] flex-shrink-0" />
                   <p className="text-2xl font-bold text-[var(--color-text-primary)]">
                     {marketGrowthRate.toFixed(1)}%
                   </p>
                 </div>
-                <p className="text-xs text-[var(--color-text-secondary)] mt-2">
+                <p className="text-xs text-[var(--color-text-secondary)] mt-auto">
                   Annual compound growth
                 </p>
               </div>
-              <div className="p-4 rounded-lg bg-black/40 border border-[var(--color-border-subtle)]">
-                <p className="text-sm text-[var(--color-text-secondary)] mb-2">
+              <div className="p-4 rounded-lg bg-black/40 border border-[var(--color-border-subtle)] flex flex-col">
+                <p className="text-sm text-[var(--color-text-secondary)] mb-3">
                   Target Market Share
                 </p>
-                <div className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-[var(--color-accent-primary)]" />
+                <div className="flex items-center gap-2 mb-2">
+                  <Target className="h-5 w-5 text-[var(--color-accent-primary)] flex-shrink-0" />
                   <p className="text-2xl font-bold text-[var(--color-text-primary)]">
                     2.5%
                   </p>
                 </div>
-                <p className="text-xs text-[var(--color-text-secondary)] mt-2">
+                <p className="text-xs text-[var(--color-text-secondary)] mt-auto">
                   Expected by year-end
                 </p>
               </div>
-              <div className="p-4 rounded-lg bg-black/40 border border-[var(--color-border-subtle)]">
-                <p className="text-sm text-[var(--color-text-secondary)] mb-2">
+              <div className="p-4 rounded-lg bg-black/40 border border-[var(--color-border-subtle)] flex flex-col">
+                <p className="text-sm text-[var(--color-text-secondary)] mb-3">
                   Acquisition Rate
                 </p>
-                <div className="flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-[var(--color-accent-primary)]" />
+                <div className="flex items-center gap-2 mb-2">
+                  <Zap className="h-5 w-5 text-[var(--color-accent-primary)] flex-shrink-0" />
                   <p className="text-2xl font-bold text-[var(--color-text-primary)]">
                     {userGrowth}%
                   </p>
                 </div>
-                <p className="text-xs text-[var(--color-text-secondary)] mt-2">
+                <p className="text-xs text-[var(--color-text-secondary)] mt-auto">
                   Projected user growth
                 </p>
               </div>

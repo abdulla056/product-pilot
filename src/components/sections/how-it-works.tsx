@@ -32,11 +32,21 @@ export function HowItWorks() {
         <div className="grid md:grid-cols-3 gap-8">
           {steps.map((step, index) => {
             const Icon = step.icon
+            const iconColors = [
+              "text-red-500", // YouTube icon - red
+              "text-purple-500", // Sparkles icon - purple
+              "text-blue-500", // Package icon - blue
+            ]
+            const bgColors = [
+              "bg-red-500/20 border-red-500/30", // YouTube
+              "bg-purple-500/20 border-purple-500/30", // Sparkles
+              "bg-blue-500/20 border-blue-500/30", // Package
+            ]
             return (
               <Card key={index} className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)] text-center">
                 <CardHeader>
-                  <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-[var(--color-accent-primary)]/20 flex items-center justify-center border-2 border-[var(--color-accent-primary)]/30">
-                    <Icon className="w-8 h-8 text-[var(--color-accent-primary)]" />
+                  <div className={`mx-auto mb-4 w-16 h-16 rounded-full ${bgColors[index]} flex items-center justify-center border-2`}>
+                    <Icon className={`w-8 h-8 ${iconColors[index]}`} />
                   </div>
                   <div className="inline-block px-3 py-1 rounded-full bg-[var(--color-accent-primary)]/20 text-[var(--color-accent-primary)] text-sm font-semibold mb-2">
                     Step {index + 1}

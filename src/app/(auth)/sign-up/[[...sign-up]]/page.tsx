@@ -7,13 +7,14 @@ export default function SignUpPage() {
         {/* Logo/Brand */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2 text-[var(--color-text-primary)]">
-            Viz<span className="text-[var(--color-accent-primary)]">-I</span>
+            Hatch
           </h1>
           <p className="text-[var(--color-text-secondary)]">Visualizing your success story</p>
         </div>
 
         {/* Clerk Sign-Up Component */}
         <SignUp 
+          afterSignUpUrl="/home"
           appearance={{
             elements: {
               rootBox: "mx-auto",
@@ -28,7 +29,7 @@ export default function SignUpPage() {
         />
 
         <p className="text-center text-xs text-[var(--color-text-secondary)]/70 mt-6">
-          By continuing, you agree to Viz-I's Terms of Service and Privacy Policy
+          By continuing, you agree to Hatch's Terms of Service and Privacy Policy
         </p>
       </div>
     </div>

@@ -32,7 +32,7 @@ export function StarRating({
             className={cn(
               sizeClasses[size],
               isFilled 
-                ? "fill-[var(--color-accent-primary)] text-[var(--color-accent-primary)]" 
+                ? "fill-yellow-400 text-yellow-400" 
                 : "fill-[var(--color-border-subtle)]/30 text-[var(--color-border-subtle)]/30"
             )}
           />

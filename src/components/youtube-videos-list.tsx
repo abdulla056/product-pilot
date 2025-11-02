@@ -80,17 +80,17 @@ export function YouTubeVideosList() {
 
   if (loading) {
     return (
-      <Card>
+      <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)]">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Youtube className="h-5 w-5 text-red-600" />
+          <CardTitle className="flex items-center gap-2 text-[var(--color-text-primary)]">
+            <Youtube className="h-5 w-5 text-[var(--color-accent-primary)]" />
             Your YouTube Videos
           </CardTitle>
-          <CardDescription>Loading your latest videos...</CardDescription>
+          <CardDescription className="text-[var(--color-text-secondary)]">Loading your latest videos...</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+            <Loader2 className="h-8 w-8 animate-spin text-[var(--color-accent-primary)]" />
           </div>
         </CardContent>
       </Card>
@@ -99,25 +99,25 @@ export function YouTubeVideosList() {
 
   if (error) {
     return (
-      <Card className="border-red-200 bg-red-50">
+      <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)]">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-red-900">
-            <AlertCircle className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-[var(--color-text-primary)]">
+            <AlertCircle className="h-5 w-5 text-[var(--color-accent-primary)]" />
             Error Loading Videos
           </CardTitle>
-          <CardDescription className="text-red-700">{error}</CardDescription>
+          <CardDescription className="text-[var(--color-text-secondary)]">{error}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {errorDetails && (
-            <div className="bg-white border border-red-200 rounded-lg p-4">
-              <h4 className="font-semibold text-sm text-red-900 mb-2">Error Details:</h4>
-              <pre className="text-xs text-red-800 overflow-auto max-h-64 bg-red-50 p-3 rounded">
+            <div className="bg-[var(--color-bg-glass)] border border-[var(--color-border-subtle)] rounded-lg p-4">
+              <h4 className="font-semibold text-sm text-[var(--color-text-primary)] mb-2">Error Details:</h4>
+              <pre className="text-xs text-[var(--color-text-secondary)] overflow-auto max-h-64 bg-[var(--color-bg-base)] p-3 rounded">
                 {JSON.stringify(errorDetails, null, 2)}
               </pre>
             </div>
           )}
-          <div className="text-sm text-red-700">
-            <p className="font-semibold mb-2">Troubleshooting steps:</p>
+          <div className="text-sm text-[var(--color-text-secondary)]">
+            <p className="font-semibold mb-2 text-[var(--color-text-primary)]">Troubleshooting steps:</p>
             <ul className="list-disc list-inside space-y-1">
               <li>Make sure your YouTube account is connected</li>
               <li>Check that your channel has videos</li>
@@ -132,18 +132,18 @@ export function YouTubeVideosList() {
 
   if (videos.length === 0) {
     return (
-      <Card className="border-yellow-200 bg-yellow-50">
+      <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)]">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-yellow-900">
-            <Youtube className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-[var(--color-text-primary)]">
+            <Youtube className="h-5 w-5 text-[var(--color-accent-primary)]" />
             No Videos Found
           </CardTitle>
-          <CardDescription className="text-yellow-700">
+          <CardDescription className="text-[var(--color-text-secondary)]">
             We couldn't find any videos on your channel
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-yellow-800">
+          <p className="text-sm text-[var(--color-text-secondary)]">
             This could mean your channel doesn't have any public videos yet, or there was an issue retrieving them.
           </p>
         </CardContent>
@@ -152,27 +152,27 @@ export function YouTubeVideosList() {
   }
 
   return (
-    <Card>
+    <Card className="bg-black/80 backdrop-blur-lg border-2 border-[var(--color-border-subtle)]">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center gap-2">
-              <Youtube className="h-5 w-5 text-red-600" />
+            <CardTitle className="flex items-center gap-2 text-[var(--color-text-primary)]">
+              <Youtube className="h-5 w-5 text-[var(--color-accent-primary)]" />
               Your YouTube Videos
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-[var(--color-text-secondary)]">
               {channelInfo?.title && `${channelInfo.title} • `}
               {videos.length} of {channelInfo?.videoCount || videos.length} videos
             </CardDescription>
           </div>
           {channelInfo && (
-            <div className="flex gap-4 text-sm text-gray-600">
+            <div className="flex gap-4 text-sm text-[var(--color-text-secondary)]">
               <div>
-                <span className="font-semibold">{parseInt(channelInfo.subscriberCount).toLocaleString()}</span>
+                <span className="font-semibold text-[var(--color-text-primary)]">{parseInt(channelInfo.subscriberCount).toLocaleString()}</span>
                 <span className="ml-1">subscribers</span>
               </div>
               <div>
-                <span className="font-semibold">{parseInt(channelInfo.viewCount).toLocaleString()}</span>
+                <span className="font-semibold text-[var(--color-text-primary)]">{parseInt(channelInfo.viewCount).toLocaleString()}</span>
                 <span className="ml-1">views</span>
               </div>
             </div>
@@ -184,9 +184,9 @@ export function YouTubeVideosList() {
           {videos.map((video) => (
             <div
               key={video.id}
-              className="group border rounded-lg overflow-hidden hover:shadow-lg transition-shadow bg-white"
+              className="group border-2 border-[var(--color-border-subtle)] rounded-lg overflow-hidden hover:border-[var(--color-accent-primary)]/50 transition-all bg-black/60 backdrop-blur-sm"
             >
-              <div className="relative aspect-video bg-gray-100">
+              <div className="relative aspect-video bg-[var(--color-bg-base)]">
                 <img
                   src={video.snippet.thumbnails?.medium?.url || video.snippet.thumbnails?.default?.url}
                   alt={video.snippet.title}
@@ -196,18 +196,18 @@ export function YouTubeVideosList() {
                   href={`https://youtube.com/watch?v=${video.id}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center"
+                  className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center"
                 >
-                  <div className="bg-red-600 rounded-full p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Youtube className="h-6 w-6 text-white" />
+                  <div className="bg-[var(--color-accent-primary)] rounded-full p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Youtube className="h-6 w-6 text-[var(--color-text-dark)]" />
                   </div>
                 </a>
               </div>
               <div className="p-3">
-                <h3 className="font-semibold text-sm line-clamp-2 mb-2 group-hover:text-red-600 transition-colors">
+                <h3 className="font-semibold text-sm line-clamp-2 mb-2 text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-primary)] transition-colors">
                   {video.snippet.title}
                 </h3>
-                <div className="flex items-center gap-2 text-xs text-gray-500">
+                <div className="flex items-center gap-2 text-xs text-[var(--color-text-secondary)]">
                   <Calendar className="h-3 w-3" />
                   {new Date(video.snippet.publishedAt).toLocaleDateString()}
                 </div>
