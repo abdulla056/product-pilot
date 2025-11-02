@@ -172,9 +172,6 @@ export function AnalysisDashboard({ channelId, channelName }: AnalysisDashboardP
             )}
           </Button>
 
-          <p className="text-xs text-center text-[var(--color-text-secondary)]">
-            ✨ Using real YouTube transcription + AI analysis
-          </p>
         </CardContent>
       </Card>
       </>

@@ -53,19 +53,72 @@ export default async function DashboardPage() {
         </div>
 
         {/* AI Analysis Dashboard - Show if YouTube connected */}
-        {/* {youtubeConnection && channelId && ( */}
-          <div className="mb-12">
-            <AnalysisDashboard 
-              channelId={channelId} 
-              channelName={(youtubeChannel as any)?.items?.[0]?.snippet?.title || "Your Channel"}
-            />
-          </div>
-        {/* )} */}
+        {youtubeConnection && channelId ? (
+          <>
+            <div className="mb-12">
+              <AnalysisDashboard 
+                channelId={channelId} 
+                channelName={(youtubeChannel as any)?.items?.[0]?.snippet?.title || "Your Channel"}
+              />
+            </div>
 
-        {/* YouTube Videos List - Show if YouTube connected */}
-        {youtubeConnection && (
+            {/* YouTube Videos List
+            <div className="mb-12">
+              <YouTubeVideosList />
+            </div> */}
+          </>
+        ) : (
+          /* Show message when YouTube is not connected */
           <div className="mb-12">
-            <YouTubeVideosList />
+            <div className="bg-[var(--color-bg-glass)] border-2 border-[var(--color-border-subtle)] rounded-2xl p-12 text-center">
+              <div className="max-w-2xl mx-auto">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[var(--color-accent-primary)]/20 border-2 border-[var(--color-accent-primary)]/30 mb-6">
+                  <Youtube className="w-10 h-10 text-[var(--color-accent-primary)]" />
+                </div>
+                
+                <h2 className="text-3xl font-bold text-[var(--color-text-primary)] mb-4">
+                  Connect Your YouTube Channel
+                </h2>
+                
+                <p className="text-lg text-[var(--color-text-secondary)] mb-8">
+                  To discover personalized product opportunities, we need to analyze your YouTube content. 
+                  Connect your channel to get started with AI-powered recommendations.
+                </p>
+
+                <div className="space-y-4 mb-8">
+                  <div className="flex items-start gap-3 text-left max-w-md mx-auto">
+                    <div className="shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent-primary)] flex items-center justify-center text-white text-sm font-bold mt-0.5">
+                      1
+                    </div>
+                    <p className="text-[var(--color-text-secondary)]">
+                      Click the &quot;Connect YouTube&quot; button above
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-start gap-3 text-left max-w-md mx-auto">
+                    <div className="shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent-primary)] flex items-center justify-center text-white text-sm font-bold mt-0.5">
+                      2
+                    </div>
+                    <p className="text-[var(--color-text-secondary)]">
+                      Authorize Hatch to access your channel (read-only)
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-start gap-3 text-left max-w-md mx-auto">
+                    <div className="shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent-primary)] flex items-center justify-center text-white text-sm font-bold mt-0.5">
+                      3
+                    </div>
+                    <p className="text-[var(--color-text-secondary)]">
+                      Run AI analysis to get 6-8 personalized product ideas
+                    </p>
+                  </div>
+                </div>
+
+                <div className="inline-block">
+                  <ConnectYouTubeButton />
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
