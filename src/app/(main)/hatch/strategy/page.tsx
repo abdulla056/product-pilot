@@ -24,7 +24,7 @@ export default function OnboardingPage() {
       if (typeof window !== "undefined") {
         sessionStorage.setItem("onboarding_strategy", selectedOption)
       }
-      router.push("/onboarding/model")
+      router.push("/hatch/model")
     }
   }
 

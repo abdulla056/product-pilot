@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { ProductOpportunity } from "@/types/analysis"
 import { 
@@ -15,7 +16,9 @@ import {
   BarChart3,
   Monitor,
   Box,
-  Handshake
+  Handshake,
+  ExternalLink,
+  Store
 } from "lucide-react"
 
 interface ProductOpportunitiesProps {
@@ -79,6 +82,29 @@ export function ProductOpportunitiesCard({ opportunities }: ProductOpportunities
         <Badge className="bg-[var(--color-accent-primary)] text-[var(--color-text-dark)]">
           {opportunities.length} opportunities found
         </Badge>
+      </div>
+
+      {/* Browse Vendors Button */}
+      <div className="bg-[var(--color-bg-glass)] border-2 border-[var(--color-accent-primary)] rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h4 className="text-lg font-semibold text-[var(--color-text-primary)] mb-1 flex items-center gap-2">
+              <Store className="h-5 w-5 text-[var(--color-accent-primary)]" />
+              Ready to Launch?
+            </h4>
+            <p className="text-sm text-[var(--color-text-secondary)]">
+              Find trusted vendors and platforms to bring your product ideas to life
+            </p>
+          </div>
+          <Button 
+            className="bg-[var(--color-accent-primary)] hover:bg-[var(--color-accent-primary)]/80 text-[var(--color-text-dark)] font-semibold"
+            onClick={() => window.location.href = '/hatch/vendors'}
+          >
+            <Store className="h-4 w-4 mr-2" />
+            Browse Vendors
+            <ExternalLink className="h-4 w-4 ml-2" />
+          </Button>
+        </div>
       </div>
 
       <Tabs defaultValue={sortedOpportunities[0]?.id} className="w-full">
